@@ -1,0 +1,6 @@
+#ifndef RECOVERYMANAGER_H
+#define RECOVERTMANAGER_H
+
+
+
+#endif
