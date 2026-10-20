@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-class WorkflowInstance {
+class WorkflowCommand {
 protected:
     Participant* actor;
     time_t timestamp;
