@@ -1,6 +1,6 @@
 # TIVIDY – Workflow Management System (COS 214)
 
-Generic C++11 workflow engine. Industry scenarios are supplied as data/packages on top of it.
+Generic C++11 workflow engine
 
 ## Build, run tests (Linux / macOS / WSL)
 
@@ -17,9 +17,8 @@ Test framework: [doctest 2.4.11](https://github.com/doctest/doctest) (MIT licenc
 
 | Path | Contents |
 |---|---|
-| repo root (`*.h`, `*.cpp`) | Person 1 – engine core (definitions, instances, versioning, `TividyEngine`) plus placeholder stand-ins for other members' classes (listed in `docs/PLACEHOLDERS.txt` – delete each as the real class lands) |
 | `tests/` | Automated unit tests |
 | `docs/` | Module documentation, design decisions |
 | `third_party/` | doctest |
 
-Generate API docs with `doxygen Doxyfile` (output in `docs/doxygen/`).
+Will generate API docs with `doxygen Doxyfile` (output in `docs/doxygen/`)
