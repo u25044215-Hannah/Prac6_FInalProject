@@ -1,3 +1,7 @@
+/**
+ * @file WorkflowOutcome.h
+ * @brief Final (or running) result of a workflow instance
+ */
 #ifndef TIVIDY_WORKFLOW_OUTCOME_H
 #define TIVIDY_WORKFLOW_OUTCOME_H
 

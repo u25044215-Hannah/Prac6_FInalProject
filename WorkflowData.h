@@ -5,7 +5,10 @@
 #include <map>
 #include <vector>
 
-///domain-free string key-value pairs for workflow execution
+/**
+ * @brief Generic string key/value store.
+ * @details Domain-free string key-value pairs for workflow execution
+ */
 class WorkflowData {
 public:
     WorkflowData() {}
