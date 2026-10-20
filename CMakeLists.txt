@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(TIVIDY CXX)
 
-# The course requires C++11. Extensions are off, so non-standard code is caught.
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -18,23 +17,20 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   endif()
 endif()
 
-# ----core engine --------------------------------------------------
+# ---- core engine (add each file here in the same commit as the file)
 set(CORE_SOURCES
   WorkflowData.cpp
-  WorkflowOutcome.cpp
-  WorkflowDefinition.cpp
-  InMemoryDefinitionRepository.cpp
-  WorkflowInstance.cpp
-  InstanceManager.cpp
-  VersionManager.cpp
-  TividyEngine.cpp)
+  WorkflowOutcome.cpp)
 
-# ---- Placeholders for other members' classes (see README.txt)
-# Delete each file from this list when the real class is merged.
-set(PLACEHOLDER_SOURCES
-  ActionHistory.cpp
-  CommandProcessor.cpp
-  RecoveryManager.cpp)
-
-add_library(tividy_core STATIC ${CORE_SOURCES} ${PLACEHOLDER_SOURCES})
+add_library(tividy_core STATIC ${CORE_SOURCES})
 target_include_directories(tividy_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# ---- Tests (doctest) ----
+enable_testing()
+add_executable(tividy_tests
+  tests/test_main.cpp
+  tests/test_workflow_data.cpp
+  tests/test_workflow_outcome.cpp)
+target_include_directories(tividy_tests PRIVATE third_party/doctest tests)
+target_link_libraries(tividy_tests tividy_core)
+add_test(NAME tividy_tests COMMAND tividy_tests)

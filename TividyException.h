@@ -17,7 +17,7 @@ public:
 };
 
 ///operation is invalid
-class InvalidInputException : public TividyException {
+class InvalidOperationException : public TividyException {
 public:
     explicit InvalidOperationException(const std::string& message) : TividyException(message) {}
 };
