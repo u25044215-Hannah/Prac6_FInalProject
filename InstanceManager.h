@@ -1,6 +1,6 @@
 /**
  * @file InstanceManager.h
- * @brief creates, owns and finds workflow instances
+ * @brief Creates, owns and finds workflow instances
  */
 #ifndef TIVIDY_INSTANCE_MANAGER_H
 #define TIVIDY_INSTANCE_MANAGER_H
@@ -15,36 +15,29 @@
 class WorkflowDefinition;
 
 /**
- * @brief Creates instances from published definitions (GoF role: Prototype::Client).
+ * @brief Creates instances by cloning a definition's template (Prototype client)
  *
- * Instances are created with a unique id, a deep clone of the definition's template tree, 
- * and a copy of the input data. The manager owns all instances and can find them by id or list them.
- * Ids are deterministic ("WF-0001", "WF-0002", ...) for repeatable tests
- * 
+ * Owns every instance. Ids are deterministic ("WF-0001", ...) so tests are repeatable
  */
 class InstanceManager {
 public:
     InstanceManager() : counter_(0) {}
     ~InstanceManager() {}
 
-    /**
-     * Create (but do not start) an independent instance.
-     * @throws InvalidOperationException if @p def is not published
-     */
+    ///create (but do not start) an instance
     WorkflowInstance* createInstance(const WorkflowDefinition& def, const WorkflowData& input);
 
-    /// @return the instance, or nullptr if id is unknown
+    /// @return the instance, or nullptr if the id is unknown
     WorkflowInstance* find(const std::string& id) const;
-
-    /// @return the instance. @throws NotFoundException if the id is unknown
+    /// @throws NotFoundException if the id is unknown
     WorkflowInstance& get(const std::string& id) const;
 
-    ///running instances created from exactly this definition version
+    ///running instances of exact definition version
     std::vector<WorkflowInstance*> runningInstancesOf(const WorkflowDefinition& def) const;
-    /// Running instances of any version of the named process.
+    ///running instances of any version of named process
     std::vector<WorkflowInstance*> runningInstancesOf(const std::string& name) const;
 
-    ///instances in creation order
+    ///all instances, oldest first
     std::vector<WorkflowInstance*> all() const;
     std::size_t count() const { return order_.size(); }
 
@@ -58,3 +51,5 @@ private:
     std::vector<std::string> order_;
     unsigned long counter_;
 };
+
+#endif // TIVIDY_INSTANCE_MANAGER_H
