@@ -38,4 +38,4 @@ public:
     virtual WorkflowDefinition* build() = 0;
 };
 
-#endif // WORKFLOWDEFINITIONBUILDER_H
+#endif
