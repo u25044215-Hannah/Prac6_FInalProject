@@ -22,9 +22,8 @@ public:
 private:
     InMemoryDefinitionRepository(const InMemoryDefinitionRepository&);
     InMemoryDefinitionRepository& operator=(const InMemoryDefinitionRepository&);
-
     typedef std::vector<std::unique_ptr<WorkflowDefinition> > VersionList;
     std::map<std::string, VersionList> store_;
 };
 
-#endif
+#endif // TIVIDY_IN_MEMORY_DEFINITION_REPOSITORY_H
