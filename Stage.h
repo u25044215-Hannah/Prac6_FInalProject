@@ -3,19 +3,26 @@
 
 #include "WorkContainer.h"
 
-class Stage : public WorkContainer
-{
+class Stage : public WorkContainer {
 public:
-    Stage(const std::string &id, const std::string &name);
+    Stage(const std::string& id, const std::string& name);
     virtual ~Stage();
 
     virtual void start();
     virtual void cancel();
     virtual bool isComplete() const;
-    virtual Stage *clone() const;
+
+    /// Deep clone (covariant return).
+    virtual Stage* clone() const;
+
+    /// Calls v.visit(*this), then accept(v) on every child.
+    virtual void accept(WorkNodeVisitor& v);
+
+    virtual WorkNodeIterator* createIterator();        ///< depth-first
+    virtual WorkNodeIterator* createReadyIterator();   ///< only ready work items
 
 protected:
-    Stage(const Stage &other);
+    Stage(const Stage& other);
 };
 
-#endif
+#endif // STAGE_H
