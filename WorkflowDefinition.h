@@ -20,12 +20,6 @@ class ApprovalHandler;
  */
 class WorkflowDefinition {
 public:
-    /**
-     * @param name  non-empty process name, e.g. "lab-test-request"
-     * @param root  template root -- must not be null
-     * @throws InvalidOperationException for an empty name or null root
-     */
-
     WorkflowDefinition(const std::string& name, std::unique_ptr<WorkNode> root);
     ~WorkflowDefinition();
 

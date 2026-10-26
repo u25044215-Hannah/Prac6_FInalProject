@@ -12,7 +12,7 @@
 class WorkflowData {
 public:
     WorkflowData() {}
-    const std::string& get(const std::string& key) const;   //throws NotFoundException
+    const std::string& get(const std::string& key) const;
     std::string getOr(const std::string& key, const std::string& fallback) const;
     void set(const std::string& key, const std::string& value);
     bool has(const std::string& key) const;

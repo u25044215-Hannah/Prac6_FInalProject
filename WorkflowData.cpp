@@ -3,7 +3,8 @@
 
 const std::string& WorkflowData::get(const std::string& key) const {
     std::map<std::string, std::string>::const_iterator it = values_.find(key);
-    if (it == values_.end()) {
+    if (it == values_.end()) 
+    {
         throw NotFoundException("WorkflowData has no key '" + key + "'");
     }
     return it->second;
@@ -28,8 +29,7 @@ bool WorkflowData::remove(const std::string& key) {
 
 std::vector<std::string> WorkflowData::keys() const {
     std::vector<std::string> result;
-    for (std::map<std::string, std::string>::const_iterator it = values_.begin();
-         it != values_.end(); ++it) {
+    for (std::map<std::string, std::string>::const_iterator it = values_.begin(); it != values_.end(); ++it) {
         result.push_back(it->first);
     }
     return result;
