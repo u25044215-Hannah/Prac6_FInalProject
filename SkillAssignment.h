@@ -1,6 +1,6 @@
 #pragma once
 #include "AssignmentStrategy.h"
-#include "Person5Forward.h"
+#include "person5Forward.h"
 
 class SkillAssignment : public AssignmentStrategy {
 public:
