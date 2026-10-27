@@ -3,10 +3,8 @@
 
 void TerminalEscalationLevel::handle(EscalationRequest& request)
 {
-    // TODO: Apply the application's terminal escalation action,
-    // such as recording an unresolved escalation or notifying an owner.
-    // The request's interface and terminal behavior are not supplied.
-    (void)request;
-    throw std::logic_error(
-        "TerminalEscalationLevel::handle requires EscalationRequest.h and a terminal action");
+    // Terminal handler: no further escalation available.
+    if (request.status != EscalationRequest::Status::Pending) return;
+    request.status = EscalationRequest::Status::Unresolved;
+    request.resolutionNote = "Unresolved: terminal escalation level reached";
 }
