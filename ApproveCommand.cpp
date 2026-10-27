@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 #include "Participant.h"
-#include "WorkItemDecorator.h"
+#include "WorkItem.h"
 
 ApproveCommand::ApproveCommand(WorkItem& item, const WorkflowData& details, Participant* actor)
     : WorkflowCommand(&item, actor), details(details) {
