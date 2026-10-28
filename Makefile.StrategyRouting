@@ -1,0 +1,46 @@
+# COS214 reusable branch smoke-test Makefile.
+# Commands:
+#   make -f Makefile.branchtest check                  # compile each selected .cpp (no linking)
+#   make -f Makefile.branchtest test                   # compile, link and run mini executable
+#   make -f Makefile.branchtest FILES='Foo.cpp Bar.cpp' check
+#   make -f Makefile.branchtest clean
+
+CXX ?= c++
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -pedantic -g
+CPPFLAGS ?= -I.
+
+TEST_MAIN := MiniMain_BranchTest.cpp
+BUILD_DIR := .branch-test-build
+
+# By default compile the .cpp files in THIS directory, excluding known entry points.
+# Override FILES to limit the compilation check to the files owned by your branch.
+FILES ?= $(filter-out $(TEST_MAIN) main.cpp Main.cpp MiniMain_Testing.cpp mini_main.cpp,$(wildcard *.cpp))
+OBJECTS := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(FILES))
+TEST_OBJECT := $(BUILD_DIR)/MiniMain_BranchTest.o
+TEST_BINARY := $(BUILD_DIR)/branch_smoke_test
+
+.PHONY: all check test clean show
+all: check
+
+show:
+	@echo "Selected files: $(FILES)"
+
+# Compilation-only check: suitable for unfinished branches with missing implementations.
+check: $(OBJECTS)
+	@echo "[PASS] Selected .cpp files compiled. Linking has NOT been checked."
+
+$(BUILD_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -MMD -MP -c $< -o $@
+
+# Full test: requires ALL external method implementations to be present.
+$(TEST_BINARY): $(OBJECTS) $(TEST_OBJECT)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+test: $(TEST_BINARY)
+	./$(TEST_BINARY)
+
+clean:
+	rm -rf $(BUILD_DIR)
+
+-include $(OBJECTS:.o=.d) $(TEST_OBJECT:.o=.d)
