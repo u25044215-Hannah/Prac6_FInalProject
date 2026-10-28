@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-#include "ResourceMediator.h"
+#include "include/ResourceMediator.h"
 #include "WorkNode.h"
 #include "WorkflowInstance.h"
 
