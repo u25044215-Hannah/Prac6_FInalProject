@@ -29,7 +29,7 @@ public:
      * @param actor participant completing work
      */
 
-    CompleteCommand(WorkItem& item, const WorkflowData* result, Participant* actor);
+    CompleteCommand(WorkItem& item, const WorkflowData& result, Participant* actor);
 
     void execute() override;
     std::string describe() const override;

@@ -4,7 +4,7 @@
 #include <string>
 #include "WorkItem.h"
 #include "WorkItemState.h"
-#include "Forward.h"
+#include "person5Forward.h"
 class Task : public WorkItem {
 public:
     Task(std::string id, std::string name, Role* requiredRole = nullptr)

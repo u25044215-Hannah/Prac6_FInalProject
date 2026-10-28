@@ -2,7 +2,7 @@
 #define WORKITEMSTATE_H
 
 #include <string>
-#include "Forward.h"
+#include "person5Forward.h"
 
 class Task;
 class WorkItemState {

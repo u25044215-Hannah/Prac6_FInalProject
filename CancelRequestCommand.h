@@ -12,7 +12,7 @@
 #include "WorkflowCommand.h"
 
 #include <vector>
-
+#include <string>
 class WorkflowInstance;
 class ResourceMediator;
 
@@ -42,8 +42,12 @@ public:
      * @param actor who cancelled it (nullptr = external event)
      */
 
-    CancelRequestCommand(WorkflowInstance& instance, const std::string& reason, Participant* actor);
-
+    CancelRequestCommand(
+    WorkflowInstance& instance,
+    //ResourceMediator& resources,
+    const std::string& reason,
+    Participant* actor
+);
     /**
      * @brief deletes the owned steps
      */
@@ -61,6 +65,7 @@ public:
     std::string describe() const override;
 private:
     WorkflowInstance* instance;
+    //ResourceMediator* resources;
     std::string reason;
     std::vector<WorkflowCommand*> steps;
 };
