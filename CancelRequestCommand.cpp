@@ -38,7 +38,7 @@ void CancelRequestCommand::execute() {
             done.push_back(steps[i]);
         }
         instance->getRoot().cancel(); // Composite: cancels every active node
-        resources->releaseAllFor(instance->getId()); // Mediator: free what the instance held
+        resources->release(instance->getId()); // Mediator: free what the instance held
         instance->setOutcome(WorkflowOutcome::CANCELLED);
     } catch (...) {
         // Put back what we can, newest first, so the instance is not left half-cancelled. Errors while undoing are ignored so that the ORIGINAL error is the one reported.
