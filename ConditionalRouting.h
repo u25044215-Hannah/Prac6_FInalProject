@@ -1,6 +1,6 @@
-#pragma once
 #include "RoutingStrategy.h"
-#include "Person5Forward.h"
+#include "person5Forward.h"
+#include "Condition.h"
 
 class ConditionalRouting : public RoutingStrategy {
 private:

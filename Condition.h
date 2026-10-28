@@ -1,4 +1,3 @@
-#pragma once
 #include "person5Forward.h"
 
 class ApprovalRequest {
