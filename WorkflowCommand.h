@@ -12,7 +12,7 @@
 #include <string>
 #include <ctime>
 
-class Particpant;
+class Participant;
 class WorkItem;
 
 /**
