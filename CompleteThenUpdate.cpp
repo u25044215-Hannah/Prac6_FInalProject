@@ -2,6 +2,7 @@
 #include "WorkflowInstance.h"
 #include "WorkflowDefinition.h"
 #include "RecoveryManager.h"
+#include "WorkNode.h"
 #include "WorkNode.h"  // ADD THIS LINE
 #include <stdexcept>
 
@@ -14,6 +15,7 @@ void CompleteThenUpdate::migrate(WorkflowInstance& instance,
     if (!instance.getRoot().isComplete()) {
         throw std::logic_error("Cannot migrate until the current workflow is complete");
     }
+    
     instance.rebindTo(definition);
     (void)recovery;
 }

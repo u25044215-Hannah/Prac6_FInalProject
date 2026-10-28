@@ -1,4 +1,3 @@
-#pragma once
 #include "RoutingStrategy.h"
 #include "Condition.h"
 #include <vector>
