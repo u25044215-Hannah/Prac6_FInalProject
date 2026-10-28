@@ -7,12 +7,11 @@
 
 #include <stdexcept>
 
-#include "ResourceMediator.h"
 #include "WorkNode.h"
 #include "WorkflowInstance.h"
 
-CancelRequestCommand::CancelRequestCommand(WorkflowInstance& instance, ResourceMediator& resources, const std::string& reason, Participant* actor)
-    : WorkflowCommand(nullptr, actor), instance(&instance), resources(&resources), reason(reason) {}
+CancelRequestCommand::CancelRequestCommand(WorkflowInstance& instance, const std::string& reason, Participant* actor)
+    : WorkflowCommand(nullptr, actor), instance(&instance), reason(reason) {}
 
 CancelRequestCommand::~CancelRequestCommand() {
     for (std::size_t i = 0; i < steps.size(); ++i) {
@@ -38,13 +37,10 @@ void CancelRequestCommand::execute() {
             done.push_back(steps[i]);
         }
         instance->getRoot().cancel(); // Composite: cancels every active node
-        resources->release(instance->getId()); // Mediator: free what the instance held
         instance->setOutcome(WorkflowOutcome::CANCELLED);
     } catch (...) {
         // Put back what we can, newest first, so the instance is not left half-cancelled. Errors while undoing are ignored so that the ORIGINAL error is the one reported.
-        
-        for (std::vector<WorkflowCommand*>::reverse_iterator it = done.rbegin();
-             it != done.rend(); ++it) {
+        for (std::vector<WorkflowCommand*>::reverse_iterator it = done.rbegin(); it != done.rend(); ++it) {
             if ((*it)->isUndoable() && !(*it)->isUndone()) {
                 try {
                     (*it)->undo();
