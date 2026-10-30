@@ -1,126 +1,71 @@
 #ifndef TASK_H
 #define TASK_H
-#include <vector>
+
 #include <string>
-#include <utility>
 #include "WorkItem.h"
 #include "WorkItemState.h"
-#include "Role.h"
-#include "Participant.h"
-#include "WorkflowData.h"
-#include "DependencySet.h"
-#include "include/WorkflowEventPublisher.h"
-
-
-class AssignmentStrategy;
+#include "Forward.h"
 class Task : public WorkItem {
 public:
-
-    const std::vector<std::string>& getRequiredSkills() const {
-    return requiredSkills;
-}
-
-void addRequiredSkill(const std::string& skill) {
-    requiredSkills.push_back(skill);
-}
-    Role* getRequiredRole() const {
-    return requiredRole;
-    }
-
     Task(std::string id, std::string name, Role* requiredRole = nullptr)
         : WorkItem(std::move(id), std::move(name)),
-          requiredRole(requiredRole) {}
+        state_(new CreatedState()),
+        requiredRole_(requiredRole) {}
 
-    Task(const Task& other)
-        : WorkItem(other.getId(), other.getName()),
-          dependencies(other.dependencies),
-          requiredRole(other.requiredRole),
-          requiredSkills(other.requiredSkills),
-          events(other.events) {}
+    ~Task() override { delete state_; }
 
-    Task& operator=(const Task&) = delete;
+    
+    void setState(WorkItemState* s) { delete state_; state_ = s; }
+    const DependencySet& getDependencies() const { return dependencies_; }
+    void addDependency(const std::string& nodeId) { dependencies_.add(nodeId); }
 
-    ~Task() override { delete state; }
-
-    //State (own listed interface)
-    void setState(WorkItemState* s) {
-        if (s != state) {
-            delete state;
-            state = s;
-        }
-    }
-    const DependencySet& getDependencies() const { return dependencies; }
-    void addDependency(const std::string& nodeId) { dependencies.add(nodeId); }
-
-    // WorkItem interface: every operation delegates to state
-    void makeAvailable() override { state->makeAvailable(*this); }
+    
+    void makeAvailable() override { state_->makeAvailable(*this); }
 
     void assign(Participant& p, Participant& ) override {
-        state->assign(*this, p);
+        state_->assign(*this, p);
     }
     void acceptAssignment(Participant& ) override {
-        state->acceptAssignment(*this);
+        state_->acceptAssignment(*this);
     }
     void declineAssignment(Participant& ) override {
-        state->declineAssignment(*this);
+        state_->declineAssignment(*this);
     }
     void complete(WorkflowData result, Participant& ) override {
-        state->complete(*this, result);
+        state_->complete(*this, result);
     }
     void fail(const std::string& reason) override {
-        lastFailureReason = reason;
-        state->fail(*this);
+        lastFailureReason_ = reason;
+        state_->fail(*this);
     }
     void reject(const std::string& reason, Participant& ) override {
-        lastRejectionReason = reason;
-        state->reject(*this);
+        lastRejectionReason_ = reason;
+        state_->reject(*this);
     }
-    void escalate() override { state->escalate(*this); }
-    void hold() override { state->hold(*this); }
-    void release() override { state->release(*this); }
-    std::string stateName() const override { return state->name(); }
+    void escalate() override { state_->escalate(*this); }
+    void hold() override { state_->hold(*this); }
+    void release() override { state_->release(*this); }
+    std::string stateName() const override { return state_->name(); }
 
-    // WorkNode interface
-void start() override {
-    state->start(*this);
-}
 
-void cancel() override {
-    state->cancel(*this);
-}
-
-bool isComplete() const override {
-    return state->isFinal();
-}
-
-// Iterator pattern: Task is a leaf node,
-// so it has no children to iterate over.
-WorkNodeIterator* createIterator() override {
-    return nullptr;
-}
-
-WorkNodeIterator* createReadyIterator() override {
-    return nullptr;
-}
-
-// clone() remains implemented by concrete subclasses
-
-    // Helpers concrete WorkItemState implementations call on Task
-    void setAssignee(Participant& p) { assignee = &p; }
-    void clearAssignee() { assignee = nullptr; }
-    Participant* getAssignee() const { return assignee; }
-    void setResult(const WorkflowData& r) { result = r; }
+    void start() override { state_->start(*this); }
+    void cancel() override { state_->cancel(*this); }
+    bool isComplete() const override { return state_->isFinal(); }
+    void setAssignee(Participant& p) { assignee_ = &p; }
+    void clearAssignee() { assignee_ = nullptr; }
+    Participant* getAssignee() const { return assignee_; }
+    void setResult(const WorkflowData& r) { result_ = r; }
 
 protected:
-    std::vector<std::string> requiredSkills;
-    WorkItemState* state;
-    DependencySet dependencies;
-    Role* requiredRole;
-    Participant* assignee = nullptr;
-    WorkflowEventPublisher* events = nullptr;
-    WorkflowData result;
-    std::string lastFailureReason;
-    std::string lastRejectionReason;
+    WorkItemState* state_;
+    DependencySet dependencies_;
+    Role* requiredRole_;
+    Participant* assignee_ = nullptr;
+    AssignmentStrategy* assignmentPolicy_ = nullptr;
+    WorkflowEventPublisher* events_ = nullptr;
+    WorkflowData result_;
+    std::string lastFailureReason_;
+    std::string lastRejectionReason_;
 };
 
-#endif // TASK_H
+#endif
