@@ -9,7 +9,7 @@
 
 class RoutingStrategy;   // Person 5
 class WorkflowData;      // Person 1
-=
+
 class WorkContainer : public WorkNode {
 public:
     virtual ~WorkContainer();
