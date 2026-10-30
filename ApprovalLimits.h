@@ -2,7 +2,9 @@
 #define APPROVAL_LIMITS_H
 
 #include <set>
-#include "ApprovalRequest.h"
+#include <string>
+
+class ApprovalRequest;
 
 class ApprovalLimits {
 private:
