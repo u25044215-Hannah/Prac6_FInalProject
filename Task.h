@@ -8,12 +8,12 @@
 #include "Participant.h"
 #include "WorkflowData.h"
 #include "DependencySet.h"
-#include "AssignmentStrategy.h"
+//#include "AssignmentStrategy.h"
 #include "include/WorkflowEventPublisher.h"
 #include "EmptyWorkNodeIterator.h"
 
 
-
+class AssignmentStrategy;
 class Task : public WorkItem {
 public:
     Task(std::string id, std::string name, Role* requiredRole = nullptr)

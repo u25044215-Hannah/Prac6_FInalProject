@@ -1,4 +1,5 @@
 #include "FallackPolicy.h" 
+#include "IntegrationTask.h"
 #include <stdexcept>
 
 FallbackPolicy::FallbackPolicy(const std::string& connector)

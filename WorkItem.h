@@ -4,6 +4,7 @@
 #include <string>
 #include "WorkNode.h"
 #include "Participant.h"
+#include "WorkflowData.h"
 
 class WorkItem : public WorkNode {
 public:
