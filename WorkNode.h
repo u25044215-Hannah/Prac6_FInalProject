@@ -1,7 +1,6 @@
 #ifndef WORKNODE_H
 #define WORKNODE_H
 
-#include <map>
 #include <string>
 
 class WorkContainer;
@@ -36,11 +35,6 @@ public:
      * WorkContainer overrides it to search its children.
      */
     virtual WorkNode* findById(const std::string& nodeId);
-
-    /// Memento support: record / re-apply the state name of every work item in
-    /// this subtree, keyed by node id. Nodes with no state of their own do nothing.
-    virtual void captureState(std::map<std::string, std::string>& out) const { (void)out; }
-    virtual void restoreState(const std::map<std::string, std::string>& in) { (void)in; }
 
     const std::string& getId() const;
     const std::string& getName() const;

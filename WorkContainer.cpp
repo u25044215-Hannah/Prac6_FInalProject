@@ -157,13 +157,3 @@ WorkNode *WorkContainer::findById(const std::string &nodeId)
     }
     return nullptr;
 }
-
-void WorkContainer::captureState(std::map<std::string, std::string>& out) const
-{
-    for (const WorkNode* c : children) c->captureState(out);
-}
-
-void WorkContainer::restoreState(const std::map<std::string, std::string>& in)
-{
-    for (WorkNode* c : children) c->restoreState(in);
-}

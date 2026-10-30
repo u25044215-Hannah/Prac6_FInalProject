@@ -1,7 +1,6 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include <map>
 #include <string>
 #include <vector>
 #include "WorkItem.h"
@@ -48,17 +47,6 @@ public:
     void addRequiredSkill(const std::string& skill) { requiredSkills.push_back(skill); }
 
     
-    // Memento support: save this task's state name; on restore, rebuild the
-    // state object from the saved name (assignee/result are not saved).
-    void captureState(std::map<std::string, std::string>& out) const override {
-        out[getId()] = state->name();
-    }
-    void restoreState(const std::map<std::string, std::string>& in) override {
-        auto it = in.find(getId());
-        if (it == in.end()) return;
-        if (WorkItemState* s = makeStateByName(it->second)) setState(s);
-    }
-
     void setState(WorkItemState* s) { delete state; state = s; }
     const DependencySet& getDependencies() const { return dependencies; }
     void addDependency(const std::string& nodeId) { dependencies.add(nodeId); }

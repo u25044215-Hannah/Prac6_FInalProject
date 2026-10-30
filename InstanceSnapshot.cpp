@@ -7,8 +7,7 @@
 
 #include "InstanceSnapshot.h"
 
-InstanceSnapshot::InstanceSnapshot()
-    : instanceId(), outcome(), started(false), createdAt(std::time(nullptr)) {}
+InstanceSnapshot::InstanceSnapshot() : createdAt(std::time(nullptr)) {}
 
 InstanceSnapshot::~InstanceSnapshot() {}
 

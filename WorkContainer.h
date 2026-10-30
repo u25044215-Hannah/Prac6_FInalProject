@@ -54,10 +54,6 @@ public:
     /// Searches this container and all descendants.
     virtual WorkNode* findById(const std::string& nodeId);
 
-    /// Memento: delegate to every child.
-    virtual void captureState(std::map<std::string, std::string>& out) const;
-    virtual void restoreState(const std::map<std::string, std::string>& in);
-
 protected:
     WorkContainer(const std::string& id, const std::string& name);
 

@@ -47,8 +47,6 @@ public:
     void accept(WorkNodeVisitor& v) override { real_->accept(v); }
     WorkNodeIterator* createIterator() override { return real_->createIterator(); }
     WorkNodeIterator* createReadyIterator() override { return real_->createReadyIterator(); }
-    void captureState(std::map<std::string, std::string>& out) const override { real_->captureState(out); }
-    void restoreState(const std::map<std::string, std::string>& in) override { real_->restoreState(in); }
     WorkNode* clone() const override { return real_->clone(); }
 
 private:
@@ -56,9 +54,6 @@ private:
     const AccessPolicy* policy_;
     WorkflowEventPublisher* events_;
  
-    // True if any of the actor's roles is permitted to perform `operation`.
-    // Otherwise publishes ACCESS_DENIED (if a publisher was supplied) and
-    // returns false, and the caller then skips the delegation.
     bool check(const Participant& actor, const std::string& operation) {
         for (const Role* role : actor.getRoles()) {
             if (role && policy_ && policy_->isAllowed(*role, operation)) return true;
@@ -67,8 +62,6 @@ private:
             WorkflowData payload;
             payload.set("operation", operation);
             payload.set("actor", actor.getId());
-            // The proxy does not know which workflow instance it belongs to, so
-            // instanceId is left empty; fill it in if the engine can supply it.
             WorkflowEvent denied(EventType::ACCESS_DENIED, getId(), "", payload);
             events_->publish(denied);
         }

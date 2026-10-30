@@ -35,8 +35,6 @@ public:
     void accept(WorkNodeVisitor& v) override { inner_->accept(v); }
     WorkNodeIterator* createIterator() override { return inner_->createIterator(); }
     WorkNodeIterator* createReadyIterator() override { return inner_->createReadyIterator(); }
-    void captureState(std::map<std::string, std::string>& out) const override { inner_->captureState(out); }
-    void restoreState(const std::map<std::string, std::string>& in) override { inner_->restoreState(in); }
     // Returns the inner item's clone, WITHOUT re-applying the decorator layers.
     WorkNode* clone() const override { return inner_->clone(); }
 
