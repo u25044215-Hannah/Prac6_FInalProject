@@ -10,7 +10,7 @@ public:
 
     virtual void execute() {
         start();
-        state_->complete(*this, WorkflowData());
+        state->complete(*this, WorkflowData());
     }
 
     void accept(WorkNodeVisitor& v) override { v.visit(*this); }
