@@ -1,13 +1,15 @@
 #ifndef ESCALATION_HANDLER_H
 #define ESCALATION_HANDLER_H
 
-#include "EscalationRequest.h"
+class EscalationRequest;
 
+// Chain of Responsibility handler. next_ is non-owning.
 class EscalationHandler {
 protected:
-    EscalationHandler* next_ = nullptr; // non-owning unless integrated otherwise
+    EscalationHandler* next_ = nullptr;
+
 public:
-    virtual ~EscalationHandler() {}
+    virtual ~EscalationHandler();
     void setNext(EscalationHandler* handler);
     virtual void handle(EscalationRequest& request);
 };

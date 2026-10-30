@@ -3,8 +3,7 @@
 #include <stdexcept>
 
 EscalationLevel::EscalationLevel(const std::string& role, int deadlineSeconds)
-    : role_(role), deadlineSeconds_(deadlineSeconds), acknowledged_(false)
-{
+    : role_(role), deadlineSeconds_(deadlineSeconds), acknowledged_(false) {
     if (role_.empty()) {
         throw std::invalid_argument("Escalation role cannot be empty");
     }
@@ -13,32 +12,15 @@ EscalationLevel::EscalationLevel(const std::string& role, int deadlineSeconds)
     }
 }
 
-void EscalationLevel::handle(EscalationRequest& request)
-{
-    if (request.status != EscalationRequest::Status::Pending) return;
+void EscalationLevel::handle(EscalationRequest& request) {
+    // The shared UML EscalationRequest only exposes item ID and level reached.
+    // Record that this level has been visited without accessing non-existent fields.
+    request.setLevelReached(request.getLevelReached() + 1);
 
-    // Record notification once. A real application would dispatch a notification here.
-    if (std::find(request.notifiedRoles.begin(), request.notifiedRoles.end(), role_)
-            == request.notifiedRoles.end()) {
-        request.notifiedRoles.push_back(role_);
+    // There is no acknowledge operation in the supplied UML, so the flag cannot
+    // be modified externally. Deadline scheduling belongs to DeadlineMonitor.
+    // This synchronous traversal forwards to the next level when not acknowledged.
+    if (!acknowledged_) {
+        EscalationHandler::handle(request);
     }
-
-    if (request.acknowledgedByRole == role_) {
-        request.status = EscalationRequest::Status::Acknowledged;
-        request.resolutionNote = "Acknowledged by " + role_;
-        return;
-    }
-
-    // This standalone model assumes the elapsed time supplied applies to this level.
-    if (request.elapsedSeconds >= deadlineSeconds_) {
-        if (next_) {
-            // A real engine would reset/measure the deadline for the next level.
-            // Here each invocation is a simulated evaluation of the whole chain.
-            next_->handle(request);
-        } else {
-            request.status = EscalationRequest::Status::Unresolved;
-            request.resolutionNote = "Escalation deadline expired at " + role_;
-        }
-    }
-    // Otherwise remain Pending until another evaluation (e.g. timer event).
 }
