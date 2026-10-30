@@ -1,12 +1,17 @@
 #include "DefinitionBuilder.h"
 
+#include <map>
 #include <memory>
+#include <set>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
+#include <vector>
 
 #include "Stage.h"
 #include "SubProcess.h"
 #include "WorkContainer.h"
+#include "WorkNode.h"
 
 // ---- Other people's classes. Every call into them is marked INTEGRATION. ----
 #include "WorkflowDefinition.h"      // Person 1
@@ -14,7 +19,8 @@
 #include "WorkItem.h"                // Person 3
 #include "HumanTask.h"               // Person 3
 #include "AutomatedTask.h"           // Person 3
-#include "DecoratorFactory.h"        // Person 3
+#include "WorkItemDecorator.h"       // Person 3
+#include "DecoratorFactory.h"        // Person 3 (isKnown / wrap by string key)
 #include "EscalationHandler.h"       // Person 5
 #include "EscalationLevel.h"         // Person 5
 #include "TerminalEscalationLevel.h" // Person 5
@@ -23,6 +29,8 @@
 
 namespace
 {
+    // Auto ids start with '@' and user ids may not, so they can never collide.
+    const char AUTO_ID_MARK = '@';
 
     void checkContainers(const WorkContainer &c, std::vector<std::string> &errors)
     {
@@ -36,7 +44,7 @@ namespace
         }
     }
 
-    typedef std::map<std::string, std::vector<std::string>> Graph;
+    typedef std::map<std::string, std::vector<std::string> > Graph;
 
     // Depth-first search; colour 1 = on current path, 2 = finished.
     bool hasCycle(const Graph &g, const std::string &n, std::map<std::string, int> &colour)
@@ -62,27 +70,29 @@ namespace
 } // namespace
 
 DefinitionBuilder::DefinitionBuilder()
-    : open(), product(nullptr), root(nullptr),
-      escalationLevels(), approvalLevels(), nextAutoId(1), usedIds(),
+    : open(), definitionName(), root(nullptr),
+      escalationHead(), escalationTail(nullptr),
+      approvalHead(), approvalTail(nullptr),
+      nextAutoId(1), usedIds(),
       dependencies(), assignments(), deadlines(), decorations() {}
 
 DefinitionBuilder::~DefinitionBuilder() { reset(); }
 
+void DefinitionBuilder::abort() { reset(); }
+
 void DefinitionBuilder::reset()
 {
-    delete root;
-    root = nullptr; // deletes the whole tree
-    delete product;
-    product = nullptr;
-    // Assumption: handlers do not delete their `next` (we free each level once).
-    for (std::size_t i = 0; i < escalationLevels.size(); ++i)
-        delete escalationLevels[i];
-    for (std::size_t i = 0; i < approvalLevels.size(); ++i)
-        delete approvalLevels[i];
-    escalationLevels.clear();
-    approvalLevels.clear();
+    delete root; // deletes the whole tree (children owned by containers)
+    root = nullptr;
+    // Heads own their whole chain (handlers own `next`). If a definition
+    // already took a shared copy, the chain lives on until it lets go.
+    escalationHead.reset();
+    approvalHead.reset();
+    escalationTail = nullptr;
+    approvalTail = nullptr;
     while (!open.empty())
         open.pop();
+    definitionName.clear();
     usedIds.clear();
     dependencies.clear();
     assignments.clear();
@@ -93,15 +103,26 @@ void DefinitionBuilder::reset()
 
 void DefinitionBuilder::requireProduct() const
 {
-    if (!product || !root)
+    if (!root)
         throw std::logic_error("beginDefinition() must be called first");
 }
 
-void DefinitionBuilder::registerId(const std::string &id)
+WorkNode *DefinitionBuilder::requireNode(const std::string &id) const
+{
+    requireProduct();
+    WorkNode *n = root->findById(id);
+    if (!n)
+        throw std::invalid_argument("unknown node id '" + id + "'");
+    return n;
+}
+
+void DefinitionBuilder::checkIdFree(const std::string &id) const
 {
     if (id.empty())
         throw std::invalid_argument("node id must not be empty");
-    if (!usedIds.insert(id).second)
+    if (id[0] == AUTO_ID_MARK)
+        throw std::invalid_argument("node id '" + id + "' must not start with '@' (reserved)");
+    if (usedIds.count(id) != 0)
         throw std::invalid_argument("duplicate node id '" + id + "'");
 }
 
@@ -110,7 +131,7 @@ std::string DefinitionBuilder::newAutoId(const char *prefix)
     for (;;)
     {
         std::ostringstream o;
-        o << prefix << nextAutoId++;
+        o << AUTO_ID_MARK << prefix << nextAutoId++;
         if (usedIds.insert(o.str()).second)
             return o.str();
     }
@@ -120,16 +141,16 @@ std::string DefinitionBuilder::newAutoId(const char *prefix)
 
 void DefinitionBuilder::beginDefinition(const std::string &name)
 {
-    if (product || root)
-        throw std::logic_error("a definition is already in progress; call build() first");
+    if (root)
+        throw std::logic_error("a definition is already in progress; call build() or abort() first");
     if (name.empty())
         throw std::invalid_argument("definition name must not be empty");
 
-    std::unique_ptr<WorkflowDefinition> def(new WorkflowDefinition(name)); // INTEGRATION: Person 1
+    // The WorkflowDefinition is created in build(): its constructor needs the root.
     std::unique_ptr<Stage> top(new Stage("root", name));
     usedIds.insert("root");
     open.push(top.get());
-    product = def.release();
+    definitionName = name;
     root = top.release();
 }
 
@@ -137,16 +158,20 @@ void DefinitionBuilder::beginStage(const std::string &name)
 {
     requireProduct();
     std::unique_ptr<Stage> s(new Stage(newAutoId("stage_"), name));
-    open.top()->add(s.get());
-    open.push(s.release());
+    Stage *raw = s.get();
+    open.top()->add(raw); // parent owns it from here on
+    s.release();
+    open.push(raw);
 }
 
 void DefinitionBuilder::beginSubProcess(const std::string &name)
 {
     requireProduct();
     std::unique_ptr<SubProcess> s(new SubProcess(newAutoId("subprocess_"), name));
-    open.top()->add(s.get());
-    open.push(s.release());
+    SubProcess *raw = s.get();
+    open.top()->add(raw);
+    s.release();
+    open.push(raw);
 }
 
 void DefinitionBuilder::endContainer()
@@ -164,10 +189,14 @@ void DefinitionBuilder::addHumanTask(const std::string &id, const std::string &r
     requireProduct();
     if (role.empty())
         throw std::invalid_argument("human task '" + id + "' needs a role");
-    registerId(id);
-    std::unique_ptr<HumanTask> t(new HumanTask(id, role)); // INTEGRATION: Person 3 ctor
+    checkIdFree(id);
+    // INTEGRATION: Person 3 ctor is HumanTask(id, name, Role* requiredRole).
+    // TODO(Person 3): turn the `role` string into a Role* and pass it as the
+    // third argument. It is only validated here for now, not stored.
+    std::unique_ptr<HumanTask> t(new HumanTask(id, id));
     open.top()->add(t.get());
     t.release();
+    usedIds.insert(id); // reserve only once the node is really in the tree
 }
 
 void DefinitionBuilder::addAutomatedTask(const std::string &id, const std::string &connector)
@@ -175,10 +204,13 @@ void DefinitionBuilder::addAutomatedTask(const std::string &id, const std::strin
     requireProduct();
     if (connector.empty())
         throw std::invalid_argument("automated task '" + id + "' needs a connector");
-    registerId(id);
-    std::unique_ptr<AutomatedTask> t(new AutomatedTask(id, connector)); // INTEGRATION: Person 3 ctor
+    checkIdFree(id);
+    // INTEGRATION: Person 3 ctor is AutomatedTask(id, name, Role*).
+    // TODO(Person 3): AutomatedTask has no place to store the connector yet.
+    std::unique_ptr<AutomatedTask> t(new AutomatedTask(id, id));
     open.top()->add(t.get());
     t.release();
+    usedIds.insert(id);
 }
 
 // -------------------------------- rules --------------------------------
@@ -196,7 +228,10 @@ void DefinitionBuilder::setRouting(const std::string &key)
     requireProduct();
     if (key.empty())
         throw std::invalid_argument("routing key must not be empty");
-    open.top()->setRoutingKey(key);
+    Stage *stage = dynamic_cast<Stage *>(open.top());
+    if (!stage)
+        throw std::logic_error("setRouting(): the open container is not a stage");
+    stage->setRoutingKey(key);
 }
 
 void DefinitionBuilder::setAssignment(const std::string &id, const std::string &key)
@@ -233,10 +268,17 @@ void DefinitionBuilder::addEscalationLevel(const std::string &role, int seconds)
     if (seconds <= 0)
         throw std::invalid_argument("escalation time must be positive");
     std::unique_ptr<EscalationHandler> level(new EscalationLevel(role, seconds)); // INTEGRATION: Person 5 ctor
-    escalationLevels.push_back(level.get());
-    level.release();
-    if (escalationLevels.size() > 1)
-        escalationLevels[escalationLevels.size() - 2]->setNext(escalationLevels.back());
+    if (escalationTail)
+    {
+        escalationTail->setNext(level.get()); // INTEGRATION: Person 5 (if this throws, level is freed)
+        escalationTail = level.release();
+    }
+    else
+    {
+        EscalationHandler *raw = level.release();
+        escalationHead.reset(raw); // shared_ptr frees raw itself if this throws
+        escalationTail = raw;
+    }
 }
 
 void DefinitionBuilder::addApprovalLevel(const std::string &role, ApprovalLimits limits)
@@ -245,16 +287,24 @@ void DefinitionBuilder::addApprovalLevel(const std::string &role, ApprovalLimits
     if (role.empty())
         throw std::invalid_argument("approval level needs a role");
     std::unique_ptr<ApprovalHandler> level(new ApprovalLevel(role, limits)); // INTEGRATION: Person 5 ctor
-    approvalLevels.push_back(level.get());
-    level.release();
-    if (approvalLevels.size() > 1)
-        approvalLevels[approvalLevels.size() - 2]->setNext(approvalLevels.back());
+    if (approvalTail)
+    {
+        approvalTail->setNext(level.get()); // INTEGRATION: Person 5
+        approvalTail = level.release();
+    }
+    else
+    {
+        ApprovalHandler *raw = level.release();
+        approvalHead.reset(raw);
+        approvalTail = raw;
+    }
 }
 
 // ------------------------------ validation ------------------------------
 
 void DefinitionBuilder::validate() const
 {
+    requireProduct();
     std::vector<std::string> errors;
 
     if (open.size() != 1)
@@ -298,11 +348,11 @@ void DefinitionBuilder::validate() const
         if (!dynamic_cast<Task *>(root->findById(it->first)))
             errors.push_back("deadline: '" + it->first + "' is not a known task");
 
-    for (std::map<std::string, std::vector<std::string>>::const_iterator it = decorations.begin();
+    for (std::map<std::string, std::vector<std::string> >::const_iterator it = decorations.begin();
          it != decorations.end(); ++it)
     {
         if (!dynamic_cast<WorkItem *>(root->findById(it->first)))
-            errors.push_back("decorator: '" + it->first + "' is not a known task");
+            errors.push_back("decorator: '" + it->first + "' is not a known work item");
         for (std::size_t k = 0; k < it->second.size(); ++k)
             if (!DecoratorFactory::isKnown(it->second[k])) // INTEGRATION: Person 3
                 errors.push_back("decorator: unknown key '" + it->second[k] + "'");
@@ -322,60 +372,74 @@ void DefinitionBuilder::validate() const
 WorkflowDefinition *DefinitionBuilder::build()
 {
     requireProduct();
-    validate(); // throws with every problem; nothing has been applied yet
 
-    // Rules that refer to nodes by id (all ids are known to exist now).
-    for (std::size_t i = 0; i < dependencies.size(); ++i)
-    {
-        Task *t = dynamic_cast<Task *>(root->findById(dependencies[i].first));
-        t->getDependencies().add(dependencies[i].second); // INTEGRATION: non-const getDependencies()
-    }
-    for (std::map<std::string, std::string>::const_iterator it = assignments.begin();
-         it != assignments.end(); ++it)
-    {
-        Task *t = dynamic_cast<Task *>(root->findById(it->first));
-        t->setAssignmentKey(it->second); // INTEGRATION: Person 3
-    }
-    for (std::map<std::string, int>::const_iterator it = deadlines.begin();
-         it != deadlines.end(); ++it)
-    {
-        Task *t = dynamic_cast<Task *>(root->findById(it->first));
-        t->setDeadlineSeconds(it->second); // INTEGRATION: Person 3
-    }
+    // Validation failure: nothing has been touched, so the builder stays usable
+    // (fix the problem and call build() again, or call abort()).
+    validate();
 
-    // Decorators last: wrap each task and swap the wrapper into the tree.
-    for (std::map<std::string, std::vector<std::string>>::const_iterator it = decorations.begin();
-         it != decorations.end(); ++it)
+    // From here on the tree is modified. Any failure leaves it half-applied,
+    // so reset everything and rethrow.
+    try
     {
-        WorkItem *item = dynamic_cast<WorkItem *>(root->findById(it->first));
-        WorkContainer *parent = item->getParent();
-        WorkItem *current = item;
-        for (std::size_t k = 0; k < it->second.size(); ++k)
-            current = DecoratorFactory::wrap(it->second[k], current); // INTEGRATION: Person 3
-        if (current != item)
-            parent->replaceChild(item, current);
-    }
+        // Rules that refer to nodes by id (all ids are known to exist now).
+        for (std::size_t i = 0; i < dependencies.size(); ++i)
+        {
+            Task *t = dynamic_cast<Task *>(root->findById(dependencies[i].first));
+            t->addDependency(dependencies[i].second); // INTEGRATION: Person 3
+        }
 
-    // Terminal level closes the escalation chain.
-    if (!escalationLevels.empty())
+        // TODO(Person 3): assignments and deadlines are collected and validated
+        // but NOT applied yet: Task has no setter for an assignment policy or a
+        // deadline. Apply them here once those exist:
+        //   for each (id, key) in `assignments`  -> task->set...(key)
+        //   for each (id, seconds) in `deadlines` -> task->set...(seconds)
+
+        // Decorators last: wrap each item and swap the wrapper into the tree.
+        // (Task-specific rules above are applied first because a wrapper is a
+        // WorkItem, not a Task, and hides the Task API.)
+        for (std::map<std::string, std::vector<std::string> >::const_iterator it = decorations.begin();
+             it != decorations.end(); ++it)
+        {
+            WorkItem *item = dynamic_cast<WorkItem *>(root->findById(it->first));
+            WorkContainer *parent = item->getParent();
+            WorkItem *current = item;
+            for (std::size_t k = 0; k < it->second.size(); ++k)
+                current = DecoratorFactory::wrap(it->second[k], current); // INTEGRATION: Person 3
+            if (current != item)
+                // INTEGRATION: must NOT delete `item` (decorator owns it) and
+                // must set `current`'s parent.
+                parent->replaceChild(item, current);
+        }
+
+        // Terminal level closes the escalation chain.
+        if (escalationHead)
+        {
+            std::unique_ptr<EscalationHandler> last(new TerminalEscalationLevel()); // INTEGRATION: Person 5
+            escalationTail->setNext(last.get());
+            escalationTail = last.release();
+        }
+
+        // Create the definition: it takes the root in its constructor. The
+        // unique_ptr owns the tree from here, so the builder lets go of it
+        // first (otherwise a throw would delete the tree twice).
+        std::unique_ptr<WorkNode> rootNode(root);
+        root = nullptr;
+        while (!open.empty()) // these pointed into the tree
+            open.pop();
+
+        std::unique_ptr<WorkflowDefinition> def(
+            new WorkflowDefinition(definitionName, std::move(rootNode))); // INTEGRATION: Person 1
+        if (escalationHead)
+            def->setEscalationChain(escalationHead); // INTEGRATION: Person 1 (shares the head)
+        if (approvalHead)
+            def->setApprovalChain(approvalHead); // INTEGRATION: Person 1
+
+        reset(); // drops the builder's own shared copies; the definition keeps its own
+        return def.release();
+    }
+    catch (...)
     {
-        std::unique_ptr<EscalationHandler> last(new TerminalEscalationLevel()); // INTEGRATION: Person 5
-        escalationLevels.push_back(last.get());
-        last.release();
-        escalationLevels[escalationLevels.size() - 2]->setNext(escalationLevels.back());
-        product->setEscalationChain(escalationLevels.front()); // INTEGRATION: Person 1
+        reset();
+        throw;
     }
-    if (!approvalLevels.empty())
-        product->setApprovalChain(approvalLevels.front()); // INTEGRATION: Person 1
-
-    product->setRoot(root); // INTEGRATION: Person 1 (takes ownership)
-
-    // Ownership has moved to the definition: forget it before reset().
-    WorkflowDefinition *result = product;
-    product = nullptr;
-    root = nullptr;
-    escalationLevels.clear();
-    approvalLevels.clear();
-    reset();
-    return result;
 }
