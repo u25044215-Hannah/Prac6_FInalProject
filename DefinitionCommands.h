@@ -75,7 +75,7 @@ namespace
 
 } // namespace
 
-void applyDefinitionCommand(WorkflowDefinitionBuilder &b,
+inline void applyDefinitionCommand(WorkflowDefinitionBuilder &b,
                             const std::string &command,
                             const std::vector<std::string> &args)
 {

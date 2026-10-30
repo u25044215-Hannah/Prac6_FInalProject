@@ -7,6 +7,11 @@
 #include "IllegalTransitionException.h"
 
 class Task;
+class WorkItemState;
+// Builds a new state object from its name() ("InProgress", ...). Returns
+// nullptr for an unknown name. Used when restoring a checkpoint.
+WorkItemState* makeStateByName(const std::string& stateName);
+
 class WorkItemState {
 public:
     virtual ~WorkItemState() = default;

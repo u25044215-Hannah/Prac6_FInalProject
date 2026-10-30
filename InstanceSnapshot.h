@@ -15,6 +15,7 @@
 #include <vector>
 #include "WorkflowData.h"
 #include "include/Deadline.h"
+#include "WorkflowOutcome.h"
 
 /**
  * @brief The state of a WorkflowInstance at a checkpoint.
@@ -44,10 +45,13 @@ private:
     std::map<std::string, std::string> assignees;   // node id -> participant id ("" = unassigned).
     WorkflowData data;                              // Copy of the instance's data.
     std::vector<Deadline> timers;                   // Timers running at the checkpoint.
+    std::string instanceId;                         // Which instance this belongs to.
+    WorkflowOutcome outcome;                        // Outcome at the checkpoint.
+    bool started;                                   // Whether the instance had started.
     std::time_t createdAt;
 
     InstanceSnapshot(const InstanceSnapshot&) = delete;
     InstanceSnapshot& operator=(const InstanceSnapshot&) = delete;
 };
 
-#endif 
+#endif
