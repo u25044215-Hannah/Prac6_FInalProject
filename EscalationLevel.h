@@ -1,6 +1,5 @@
 #pragma once
 #include "EscalationHandler.h"
-#include "Person5Forward.h"
 
 class EscalationLevel : public EscalationHandler {
 private:
