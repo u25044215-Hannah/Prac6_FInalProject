@@ -39,13 +39,7 @@ namespace
         throw std::runtime_error("unknown command '" + cmd + "'");
     }
 
-    std::string lower(std::string s)
-    {
-        for (std::size_t i = 0; i < s.size(); ++i)
-            if (s[i] >= 'A' && s[i] <= 'Z')
-                s[i] = static_cast<char>(s[i] - 'A' + 'a');
-        return s;
-    }
+   
 
 } // namespace
 

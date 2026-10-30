@@ -1,6 +1,6 @@
 #ifndef TASK_H
 #define TASK_H
-
+#include <vector>
 #include <string>
 #include "WorkItem.h"
 #include "WorkItemState.h"
@@ -16,6 +16,18 @@
 class AssignmentStrategy;
 class Task : public WorkItem {
 public:
+
+    const std::vector<std::string>& getRequiredSkills() const {
+    return requiredSkills;
+}
+
+void addRequiredSkill(const std::string& skill) {
+    requiredSkills.push_back(skill);
+}
+    Role* getRequiredRole() const {
+    return requiredRole;
+    }
+
     Task(std::string id, std::string name, Role* requiredRole = nullptr)
         : WorkItem(std::move(id), std::move(name)),
           state(new CreatedState()),
@@ -27,6 +39,7 @@ public:
           dependencies(other.dependencies),
           requiredRole(other.requiredRole),
           assignmentPolicy(other.assignmentPolicy),
+          requiredSkills(other.requiredSkills),
           events(other.events) {}
 
     Task& operator=(const Task&) = delete;
@@ -99,6 +112,7 @@ WorkNodeIterator* createReadyIterator() override {
     void setResult(const WorkflowData& r) { result = r; }
 
 protected:
+    std::vector<std::string> requiredSkills;
     WorkItemState* state;
     DependencySet dependencies;
     Role* requiredRole;
