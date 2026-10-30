@@ -1,3 +1,6 @@
+#ifndef DEFINITION_COMMANDS_H
+#define DEFINITION_COMMANDS_H
+
 #include "DefinitionCommands.h"
 
 #include <algorithm>
@@ -155,3 +158,6 @@ void applyDefinitionCommand(WorkflowDefinitionBuilder &b,
         throw std::runtime_error("unknown command '" + command + "'");
     }
 }
+
+
+#endif // DEFINITION_COMMANDS_H

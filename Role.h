@@ -1,5 +1,7 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef ROLE_H
+#define ROLE_H
+
+#include <string>
 
 class Role {
 private:
@@ -8,3 +10,5 @@ public:
     explicit Role(const std::string& name);
     const std::string& getName() const;
 };
+
+#endif // ROLE_H

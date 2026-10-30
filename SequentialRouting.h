@@ -1,6 +1,7 @@
-#pragma once
+#ifndef SEQUENTIAL_ROUTING_H
+#define SEQUENTIAL_ROUTING_H
 #include "RoutingStrategy.h"
-#include "Person5Forward.h"
+
 
 class SequentialRouting : public RoutingStrategy {
 public:
@@ -8,3 +9,4 @@ public:
                                      const WorkflowData& data) override;
     bool isComplete(const WorkContainer& container) const override;
 };
+#endif // SEQUENTIAL_ROUTING_H

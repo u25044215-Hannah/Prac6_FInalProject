@@ -1,5 +1,9 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef APPROVAL_REQUEST_H
+#define APPROVAL_REQUEST_H
+
+#include <string>
+
+class WorkflowData;   
 
 class ApprovalRequest {
 private:
@@ -13,3 +17,5 @@ public:
     const std::string& getDecision() const;
     void setDecision(const std::string& decision, const std::string& reason);
 };
+
+#endif // APPROVAL_REQUEST_H
