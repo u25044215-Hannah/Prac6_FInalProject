@@ -29,7 +29,14 @@ public:
     void start() override { inner_->start(); }
     void cancel() override { inner_->cancel(); }
     bool isComplete() const override { return inner_->isComplete(); }
-    WorkNode* clone() const override { return inner_->clone(); } // each concrete decorator should re-wrap; see note below
+    // Visitor and iterator factories are forwarded so a visitor or iterator
+    // reaches the wrapped item exactly once (the decorator is not a second node).
+    // The iterator yields the inner item, i.e. the undecorated Task.
+    void accept(WorkNodeVisitor& v) override { inner_->accept(v); }
+    WorkNodeIterator* createIterator() override { return inner_->createIterator(); }
+    WorkNodeIterator* createReadyIterator() override { return inner_->createReadyIterator(); }
+    // Returns the inner item's clone, WITHOUT re-applying the decorator layers.
+    WorkNode* clone() const override { return inner_->clone(); }
 
 protected:
     WorkItem* inner_;

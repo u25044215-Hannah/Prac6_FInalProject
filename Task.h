@@ -2,10 +2,13 @@
 #define TASK_H
 
 #include <string>
+#include <vector>
 #include "WorkItem.h"
 #include "WorkItemState.h"
 #include "DependencySet.h"
 #include "AssignmentStrategy.h"
+#include "DepthFirstIterator.h"
+#include "ReadyItemIterator.h"
 #include "include/WorkflowEventPublisher.h"
 
 class Task : public WorkItem {
@@ -15,7 +18,33 @@ public:
         state(new CreatedState()),
         requiredRole(requiredRole) {}
 
+    // Task owns its WorkItemState*, so the compiler-generated copy would leave
+    // two Tasks pointing at (and deleting) the same state. A copy is a clone:
+    // it takes the definition (id/name via WorkNode's copy constructor, role,
+    // skills, dependencies, policy) and starts fresh in CreatedState with no
+    // assignee or result. WorkNode's copy constructor also clears the parent.
+    Task(const Task& other)
+        : WorkItem(other),
+        state(new CreatedState()),
+        dependencies(other.dependencies),
+        requiredRole(other.requiredRole),
+        requiredSkills(other.requiredSkills),
+        assignmentPolicy(other.assignmentPolicy),
+        events(other.events) {}
+
     ~Task() override { delete state; }
+
+    // Iterator factories (WorkNode declares them pure). A leaf has no children,
+    // so these iterate over just this item, consistent with DepthFirstIterator
+    // yielding its starting node first. The caller owns the returned iterator.
+    WorkNodeIterator* createIterator() override { return new DepthFirstIterator(this); }
+    WorkNodeIterator* createReadyIterator() override { return new ReadyItemIterator(this); }
+
+    // Read access used by the assignment strategies (RoleAssignment,
+    // SkillAssignment). Neither is drawn on Task in Figure 5.3.
+    Role* getRequiredRole() const { return requiredRole; }
+    const std::vector<std::string>& getRequiredSkills() const { return requiredSkills; }
+    void addRequiredSkill(const std::string& skill) { requiredSkills.push_back(skill); }
 
     
     void setState(WorkItemState* s) { delete state; state = s; }
@@ -24,6 +53,8 @@ public:
 
     
     void makeAvailable() override { state->makeAvailable(*this); }
+    virtual Task* clone() const override = 0;
+
 
     void assign(Participant& p, Participant& ) override {
         state->assign(*this, p);
@@ -63,6 +94,7 @@ protected:
     WorkItemState* state;
     DependencySet dependencies;
     Role* requiredRole;
+    std::vector<std::string> requiredSkills;
     Participant* assignee = nullptr;
     AssignmentStrategy* assignmentPolicy = nullptr;
     WorkflowEventPublisher* events = nullptr;

@@ -14,6 +14,8 @@ private:
     std::vector<Role*> roles;
 
 public:
+    const std::vector<Role*>& getRoles() const { return roles; }
+
     const std::vector<std::string>& getSkills() const {
     return skills;
 }

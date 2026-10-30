@@ -3,9 +3,8 @@
 
 #include <string>
 #include "Participant.h"
-#include "Task.h"
-#include "WorkItem.h"
 #include "WorkflowData.h"
+#include "IllegalTransitionException.h"
 
 class Task;
 class WorkItemState {

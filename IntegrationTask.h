@@ -3,6 +3,7 @@
 
 #include <string>
 #include "AutomatedTask.h"
+#include "WorkNode.h"
 
 class ResiliencePolicy;   // Strategy (Rules and Decisions)
 class ConnectorRegistry;  // Mediator (Events and Surroundings)
@@ -16,6 +17,15 @@ public:
           policy_(policy),
           attempts_(0),
           connectors_(connectors) {}
+
+    // A clone is a new unit of work, so its retry count starts again at zero
+    // (the implicit copy would carry the original's attempts over).
+    IntegrationTask(const IntegrationTask& other)
+        : AutomatedTask(other),
+          connectorName_(other.connectorName_),
+          policy_(other.policy_),
+          attempts_(0),
+          connectors_(other.connectors_) {}
 
     void execute() override;
 
