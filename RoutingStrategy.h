@@ -1,5 +1,7 @@
-#pragma once
-#include "Person5Forward.h"
+#ifndef ROUTING_STRATEGY_H
+#define ROUTING_STRATEGY_H
+#include "WorkNode.h"
+#include "WorkContainer.h"
 
 class RoutingStrategy {
 public:
@@ -8,3 +10,5 @@ public:
                                               const WorkflowData& data) = 0;
     virtual bool isComplete(const WorkContainer& container) const = 0;
 };
+
+#endif // ROUTING_STRATEGY_H

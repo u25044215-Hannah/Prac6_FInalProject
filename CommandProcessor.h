@@ -54,7 +54,7 @@ public:
      * @brief most recent undoable, not yet undone command, or nullptr
      */
 
-    bool canUndo(WorkflowInstance* inst) const;
+    bool canUndo(WorkflowInstance& inst) const;
 private:
     /**
      * @brief true if undoLast() would find a command to undo / nullptr

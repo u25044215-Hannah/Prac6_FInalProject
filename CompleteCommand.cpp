@@ -9,11 +9,9 @@
 
 #include "WorkItem.h"
 
-CompleteCommand::CompleteCommand(WorkItem& item, const WorkflowData& result, Participant* actor)
-    : WorkflowCommand(&item, actor), result(result) {
-    if (actor == nullptr) {
-        throw std::invalid_argument("CompleteCommand: an actor is required");
-    }
+CompleteCommand::CompleteCommand( WorkItem& item, const WorkflowData& result, Participant* actor)
+    : WorkflowCommand(&item, actor), result(result)
+{
 }
 
 void CompleteCommand::execute() {

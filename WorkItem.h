@@ -2,7 +2,9 @@
 #define WORKITEM_H
 
 #include <string>
-#include "Forward.h"
+#include "WorkNode.h"
+#include "Participant.h"
+
 class WorkItem : public WorkNode {
 public:
     WorkItem(std::string id, std::string name) : WorkNode(std::move(id), std::move(name)) {}

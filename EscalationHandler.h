@@ -1,11 +1,17 @@
-#pragma once
-#include "Person5Forward.h"
+#ifndef ESCALATION_HANDLER_H
+#define ESCALATION_HANDLER_H
 
+class EscalationRequest;
+
+// Chain of Responsibility handler. next_ is non-owning.
 class EscalationHandler {
 protected:
-    EscalationHandler* next_ = nullptr; // non-owning unless integrated otherwise
+    EscalationHandler* next_ = nullptr;
+
 public:
-    virtual ~EscalationHandler() {}
+    virtual ~EscalationHandler();
     void setNext(EscalationHandler* handler);
     virtual void handle(EscalationRequest& request);
 };
+
+#endif // ESCALATION_HANDLER_H

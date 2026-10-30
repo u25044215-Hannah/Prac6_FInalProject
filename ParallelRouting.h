@@ -1,6 +1,6 @@
-#pragma once
+#ifndef PARALLEL_ROUTING_H
+#define PARALLEL_ROUTING_H
 #include "RoutingStrategy.h"
-#include "Person5Forward.h"
 
 class ParallelRouting : public RoutingStrategy {
 public:
@@ -8,3 +8,5 @@ public:
                                      const WorkflowData& data) override;
     bool isComplete(const WorkContainer& container) const override;
 };
+
+#endif

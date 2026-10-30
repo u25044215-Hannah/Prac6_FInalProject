@@ -1,15 +1,23 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef CONDITION_H
+#define CONDITION_H
 
-class ApprovalRequest {
+#include "WorkflowData.h"
+#include <string>
+
+class Condition {
 private:
-    std::string itemId_;
-    WorkflowData* result_ = nullptr; // non-owning workflow data
-    std::string decision_;
-    std::string reason_;
+    std::string key_;
+    std::string expectedValue_;
+
 public:
-    ApprovalRequest(const std::string& itemId, WorkflowData& result);
-    const std::string& getItemId() const;
-    const std::string& getDecision() const;
-    void setDecision(const std::string& decision, const std::string& reason);
+    Condition(const std::string& key,
+              const std::string& expectedValue)
+        : key_(key), expectedValue_(expectedValue) {}
+
+    bool evaluate(const WorkflowData& data) const {
+        return data.has(key_) &&
+               data.get(key_) == expectedValue_;
+    }
 };
+
+#endif

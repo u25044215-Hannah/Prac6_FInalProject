@@ -1,11 +1,15 @@
-#pragma once
-#include "Person5Forward.h"
+#ifndef APPROVAL_HANDLER_H
+#define APPROVAL_HANDLER_H
+
+class ApprovalRequest;
 
 class ApprovalHandler {
 protected:
-    ApprovalHandler* next_ = nullptr; // successor; owning policy agreed at integration
+    ApprovalHandler* next_ = nullptr; // non-owning successor
 public:
-    virtual ~ApprovalHandler() {}
+    virtual ~ApprovalHandler() = default;
     void setNext(ApprovalHandler* handler);
     virtual bool handle(ApprovalRequest& request);
 };
+
+#endif // APPROVAL_HANDLER_H
