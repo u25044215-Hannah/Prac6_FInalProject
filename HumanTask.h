@@ -3,6 +3,7 @@
 
 #include "Task.h"
 #include "WorkNodeVisitor.h"
+#include "WorkNode.h"
 
 class HumanTask : public Task {
 public:

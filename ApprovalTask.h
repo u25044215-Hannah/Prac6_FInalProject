@@ -2,6 +2,7 @@
 #define APPROVALTASK_H
 
 #include "HumanTask.h"
+#include "WorkNode.h"
 
 class ApprovalHandler; // Chain of Responsibility (rules and decisions)
 class ApprovalTask : public HumanTask {

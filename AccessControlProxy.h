@@ -5,8 +5,8 @@
 #include "AccessPolicy.h"
 #include "Participant.h"
 #include "WorkflowData.h"
-#include "WorkflowEvent.h"
-#include "WorkflowEventPublisher.h"
+#include "include/WorkflowEvent.h"
+#include "include/WorkflowEventPublisher.h"
 #include "Role.h"
 
 
@@ -44,6 +44,9 @@ public:
     void start() override { real_->start(); }
     void cancel() override { real_->cancel(); }
     bool isComplete() const override { return real_->isComplete(); }
+    void accept(WorkNodeVisitor& v) override { real_->accept(v); }
+    WorkNodeIterator* createIterator() override { return real_->createIterator(); }
+    WorkNodeIterator* createReadyIterator() override { return real_->createReadyIterator(); }
     WorkNode* clone() const override { return real_->clone(); }
 
 private:
@@ -51,7 +54,19 @@ private:
     const AccessPolicy* policy_;
     WorkflowEventPublisher* events_;
  
-    bool check(const Participant& actor, const std::string& operation) {}
+    bool check(const Participant& actor, const std::string& operation) {
+        for (const Role* role : actor.getRoles()) {
+            if (role && policy_ && policy_->isAllowed(*role, operation)) return true;
+        }
+        if (events_) {
+            WorkflowData payload;
+            payload.set("operation", operation);
+            payload.set("actor", actor.getId());
+            WorkflowEvent denied(EventType::ACCESS_DENIED, getId(), "", payload);
+            events_->publish(denied);
+        }
+        return false;
+    }
 };
 
 #endif

@@ -1,8 +1,10 @@
 #ifndef ASSIGNMENT_STRATEGY_H
 #define ASSIGNMENT_STRATEGY_H
 
+#include <vector>
 #include "Participant.h"
-#include "Task.h"
+
+class Task;
 
 class AssignmentStrategy {
 public:

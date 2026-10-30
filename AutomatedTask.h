@@ -3,6 +3,9 @@
 
 #include "Task.h"
 #include "WorkNodeVisitor.h"
+#include "Role.h"
+#include "WorkNode.h"
+
 class AutomatedTask : public Task {
 public:
     AutomatedTask(std::string id, std::string name, Role* requiredRole = nullptr)
