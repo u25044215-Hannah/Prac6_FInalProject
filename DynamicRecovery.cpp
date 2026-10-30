@@ -21,7 +21,7 @@ void DynamicMigration::migrate(WorkflowInstance& instance,
         instance.rebindTo(definition);
     } catch (...) {
         recovery.rollback(instance, checkpointLabel);
-        recovery.discard(instance, checkpointLabel);
+        recovery.discard(checkpointLabel);
         throw;
     }
     recovery.discard(instance, checkpointLabel);

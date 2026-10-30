@@ -14,16 +14,19 @@ private:
     std::vector<Role*> roles;
 
 public:
+    const std::vector<std::string>& getSkills() const {
+    return skills;
+}
     explicit Participant(const std::string& id);
 
-    bool hasRole(const Role& role) const;
-    int getWorkload() const;
-    const std::string& getId() const;
-    bool hasSkill(const std::string& skill) const;
+    
 
     void addRole(Role& role);
     void addSkill(const std::string& skill);
     void adjustWorkload(int delta);
+    const std::string& getId() const {
+    return ids;
+}
 };
 
 #endif // PARTICIPANT_H

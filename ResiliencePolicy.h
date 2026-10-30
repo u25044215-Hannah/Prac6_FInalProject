@@ -2,8 +2,7 @@
 #define RESILIENCE_POLICY_H
 
 #include "Task.h"
-#include "IntegrationTask.h"
-
+class IntegrationTask;
 class ResiliencePolicy {
 public:
     virtual ~ResiliencePolicy() {}
