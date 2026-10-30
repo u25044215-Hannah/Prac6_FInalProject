@@ -9,7 +9,7 @@
 
 class RoutingStrategy;   // Person 5
 class WorkflowData;      // Person 1
-
+=
 class WorkContainer : public WorkNode {
 public:
     virtual ~WorkContainer();
@@ -20,6 +20,11 @@ public:
     /// Detach n from this container and delete it. No-op if n is not a child.
     void remove(WorkNode* n);
 
+    /**
+     * @brief Put `replacement` in the slot of `oldNode` WITHOUT deleting oldNode.
+     * Used by the builder to wrap a task in decorators: the decorator takes
+     * over ownership of oldNode. Throws std::logic_error if oldNode is not a child.
+     */
     void replaceChild(WorkNode* oldNode, WorkNode* replacement);
 
     const std::vector<WorkNode*>& getChildren() const;

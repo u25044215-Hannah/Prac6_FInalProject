@@ -5,11 +5,6 @@
 #include "WorkflowData.h"      // Person 1
 #include "WorkflowOutcome.h"   // Person 1
 
-/**
- * @brief A nested workflow with its own local data and outcome.
- * Patterns: Composite (concrete composite), Prototype (concrete prototype),
- *           Visitor (concrete element), Iterator (aggregate).
- */
 class SubProcess : public WorkContainer {
 public:
     SubProcess(const std::string& id, const std::string& name);

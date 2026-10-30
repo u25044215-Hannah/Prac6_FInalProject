@@ -7,15 +7,6 @@ class WorkContainer;
 class WorkNodeVisitor;
 class WorkNodeIterator;
 
-/**
- * @brief Abstract node of the workflow tree.
- *
- * Patterns: Composite (Component), Prototype (Prototype),
- *           Visitor (Element), Iterator (Aggregate).
- *
- * Ownership: a node is owned by its parent WorkContainer (composition).
- * A node with no parent (e.g. a template root) is owned by whoever holds it.
- */
 class WorkNode {
 public:
     virtual ~WorkNode();
