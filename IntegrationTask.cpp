@@ -17,7 +17,7 @@ void IntegrationTask::execute() {
                 throw std::runtime_error("no connector registered as '" + connectorName_ + "'");
             }
             WorkflowData response = connector->send(WorkflowData());
-            state_->complete(*this, response); // InProgress -> Completed
+            state->complete(*this, response); // InProgress -> Completed
             return;
         } catch (const std::exception& e) {
             failure = e.what();

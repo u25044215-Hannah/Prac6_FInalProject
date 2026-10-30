@@ -1,6 +1,6 @@
-#pragma once
+#ifndef LOOP_ROUTING_H
+#define LOOP_ROUTING_H
 #include "RoutingStrategy.h"
-#include "Person5Forward.h"
 
 class LoopRouting : public RoutingStrategy {
 private:
@@ -11,3 +11,5 @@ public:
                                      const WorkflowData& data) override;
     bool isComplete(const WorkContainer& container) const override;
 };
+
+#endif

@@ -10,5 +10,5 @@ void ForwardRecovery::migrate(WorkflowInstance& instance,
                               RecoveryManager& recovery)
 {
     (void)recovery; // Forward migration does not request a rollback.
-    instance.rebindTo(&definition);
+    instance.rebindTo(definition);
 }

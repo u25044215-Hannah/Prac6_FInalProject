@@ -4,7 +4,7 @@
 /* WorkItemState  
 base:default =illegal */
 void WorkItemState::reject_transition(const std::string& operation) const{
-    throw IllegalTransitionException(name(), operation);
+    //throw IllegalTransitionException(name(), operation);
 }
 
 void WorkItemState::makeAvailable(Task&) { 
