@@ -10,6 +10,7 @@
 #include "DependencySet.h"
 #include "AssignmentStrategy.h"
 #include "include/WorkflowEventPublisher.h"
+#include "EmptyWorkNodeIterator.h"
 
 
 
@@ -66,10 +67,30 @@ public:
     std::string stateName() const override { return state->name(); }
 
     //WorkNode interface
-    void start() override { state->start(*this); }
-    void cancel() override { state->cancel(*this); }
-    bool isComplete() const override { return state->isFinal(); }
-    // clone() intentionally left pure virtual 
+    // WorkNode interface
+void start() override {
+    state->start(*this);
+}
+
+void cancel() override {
+    state->cancel(*this);
+}
+
+bool isComplete() const override {
+    return state->isFinal();
+}
+
+// Iterator pattern: Task is a leaf node,
+// so it has no children to iterate over.
+WorkNodeIterator* createIterator() override {
+    return new EmptyWorkNodeIterator();
+}
+
+WorkNodeIterator* createReadyIterator() override {
+    return new EmptyWorkNodeIterator();
+}
+
+// clone() remains implemented by concrete subclasses
 
     // Helpers concrete WorkItemState implementations call on Task
     void setAssignee(Participant& p) { assignee = &p; }
