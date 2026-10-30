@@ -39,7 +39,7 @@ namespace
         throw std::runtime_error("unknown command '" + cmd + "'");
     }
 
-    std::string lower(std::string s)
+    std::string lowercaseCommand(std::string s)
     {
         for (std::size_t i = 0; i < s.size(); ++i)
             if (s[i] >= 'A' && s[i] <= 'Z')
@@ -68,7 +68,7 @@ void InteractiveDefinitionDirector::construct(WorkflowDefinitionBuilder &b)
         {
             if (!step.has("cmd"))
                 throw std::runtime_error("missing 'cmd'");
-            const std::string cmd = lower(step.get("cmd"));
+            const std::string cmd = lowercaseCommand(step.get("cmd"));
 
             std::vector<std::string> args;
             const std::vector<std::string> keys = requiredKeys(cmd);

@@ -2,6 +2,8 @@
 #define WORKITEM_H
 
 #include <string>
+#include <utility>
+#include "WorkflowData.h"
 #include "WorkNode.h"
 #include "Participant.h"
 
@@ -23,4 +25,4 @@ public:
     virtual std::string stateName() const = 0;
 };
 
-#endif
+#endif // WORKITEM_H

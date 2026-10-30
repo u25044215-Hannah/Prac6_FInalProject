@@ -2,6 +2,7 @@
 #define RESILIENCE_POLICY_H
 
 #include "Task.h"
+#include "IntegrationTask.h"
 
 class ResiliencePolicy {
 public:

@@ -4,6 +4,7 @@
 #include <vector>
 #include "WorkflowDirector.h"
 #include "WorkflowData.h"
+#include "DefinitionCommands.h"
 
 class InteractiveDefinitionDirector : public WorkflowDirector {
 public:

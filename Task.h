@@ -2,6 +2,7 @@
 #define TASK_H
 
 #include <string>
+#include <utility>
 #include "WorkItem.h"
 #include "WorkItemState.h"
 #include "Role.h"
@@ -10,7 +11,6 @@
 #include "DependencySet.h"
 #include "AssignmentStrategy.h"
 #include "include/WorkflowEventPublisher.h"
-#include "EmptyWorkNodeIterator.h"
 
 
 
@@ -18,15 +18,12 @@ class Task : public WorkItem {
 public:
     Task(std::string id, std::string name, Role* requiredRole = nullptr)
         : WorkItem(std::move(id), std::move(name)),
-          state(new CreatedState()),
           requiredRole(requiredRole) {}
 
     Task(const Task& other)
         : WorkItem(other.getId(), other.getName()),
-          state(new CreatedState()),
           dependencies(other.dependencies),
           requiredRole(other.requiredRole),
-          assignmentPolicy(other.assignmentPolicy),
           events(other.events) {}
 
     Task& operator=(const Task&) = delete;
@@ -34,7 +31,12 @@ public:
     ~Task() override { delete state; }
 
     //State (own listed interface)
-    void setState(WorkItemState* s) { delete state; state = s; }
+    void setState(WorkItemState* s) {
+        if (s != state) {
+            delete state;
+            state = s;
+        }
+    }
     const DependencySet& getDependencies() const { return dependencies; }
     void addDependency(const std::string& nodeId) { dependencies.add(nodeId); }
 
@@ -66,7 +68,6 @@ public:
     void release() override { state->release(*this); }
     std::string stateName() const override { return state->name(); }
 
-    //WorkNode interface
     // WorkNode interface
 void start() override {
     state->start(*this);
@@ -83,11 +84,11 @@ bool isComplete() const override {
 // Iterator pattern: Task is a leaf node,
 // so it has no children to iterate over.
 WorkNodeIterator* createIterator() override {
-    return new EmptyWorkNodeIterator();
+    return nullptr;
 }
 
 WorkNodeIterator* createReadyIterator() override {
-    return new EmptyWorkNodeIterator();
+    return nullptr;
 }
 
 // clone() remains implemented by concrete subclasses
@@ -96,6 +97,7 @@ WorkNodeIterator* createReadyIterator() override {
     void setAssignee(Participant& p) { assignee = &p; }
     void clearAssignee() { assignee = nullptr; }
     Participant* getAssignee() const { return assignee; }
+    const Role* getRequiredRole() const;
     void setResult(const WorkflowData& r) { result = r; }
 
 protected:
@@ -103,11 +105,10 @@ protected:
     DependencySet dependencies;
     Role* requiredRole;
     Participant* assignee = nullptr;
-    AssignmentStrategy* assignmentPolicy = nullptr;
-    WorkflowEventPublisher* events= nullptr;
+    WorkflowEventPublisher* events = nullptr;
     WorkflowData result;
     std::string lastFailureReason;
     std::string lastRejectionReason;
 };
 
-#endif
+#endif // TASK_H

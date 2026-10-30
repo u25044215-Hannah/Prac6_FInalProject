@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 #include "WorkflowData.h"
-#include "Deadline.h"
+#include "include/Deadline.h"
 
 /**
  * @brief The state of a WorkflowInstance at a checkpoint.

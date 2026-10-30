@@ -1,8 +1,8 @@
 #include "IntegrationTask.h"
 #include <exception>
 #include <stdexcept>
-#include "ConnectorRegistry.h"
-#include "ExternalConnector.h"
+#include "include/ConnectorRegistry.h"
+#include "include/ExternalConnector.h"
 #include "ResiliencePolicy.h"
 
 void IntegrationTask::execute() {

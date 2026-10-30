@@ -17,7 +17,7 @@ std::vector<WorkNode*> LoopRouting::nextNodes(
                 return {children[j]};
         }
         // The current iteration reached the end.
-        if (repeatWhile_ != nullptr && repeatWhile_->evaluate(data)) {
+        if (repeatWhile != nullptr && repeatWhile->evaluate(data)) {
             // No iteration counter or child reset API appears in the given
             // header, so safe loop repetition cannot be implemented yet.
             throw std::logic_error(
