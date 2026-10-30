@@ -4,68 +4,71 @@
 #include <string>
 #include "WorkItem.h"
 #include "WorkItemState.h"
-#include "Forward.h"
+#include "DependencySet.h"
+#include "AssignmentStrategy.h"
+#include "include/WorkflowEventPublisher.h"
+
 class Task : public WorkItem {
 public:
     Task(std::string id, std::string name, Role* requiredRole = nullptr)
         : WorkItem(std::move(id), std::move(name)),
-        state_(new CreatedState()),
-        requiredRole_(requiredRole) {}
+        state(new CreatedState()),
+        requiredRole(requiredRole) {}
 
-    ~Task() override { delete state_; }
-
-    
-    void setState(WorkItemState* s) { delete state_; state_ = s; }
-    const DependencySet& getDependencies() const { return dependencies_; }
-    void addDependency(const std::string& nodeId) { dependencies_.add(nodeId); }
+    ~Task() override { delete state; }
 
     
-    void makeAvailable() override { state_->makeAvailable(*this); }
+    void setState(WorkItemState* s) { delete state; state = s; }
+    const DependencySet& getDependencies() const { return dependencies; }
+    void addDependency(const std::string& nodeId) { dependencies.add(nodeId); }
+
+    
+    void makeAvailable() override { state->makeAvailable(*this); }
 
     void assign(Participant& p, Participant& ) override {
-        state_->assign(*this, p);
+        state->assign(*this, p);
     }
     void acceptAssignment(Participant& ) override {
-        state_->acceptAssignment(*this);
+        state->acceptAssignment(*this);
     }
     void declineAssignment(Participant& ) override {
-        state_->declineAssignment(*this);
+        state->declineAssignment(*this);
     }
     void complete(WorkflowData result, Participant& ) override {
-        state_->complete(*this, result);
+        state->complete(*this, result);
     }
     void fail(const std::string& reason) override {
-        lastFailureReason_ = reason;
-        state_->fail(*this);
+        lastFailureReason = reason;
+        state->fail(*this);
     }
     void reject(const std::string& reason, Participant& ) override {
-        lastRejectionReason_ = reason;
-        state_->reject(*this);
+        lastRejectionReason = reason;
+        state->reject(*this);
     }
-    void escalate() override { state_->escalate(*this); }
-    void hold() override { state_->hold(*this); }
-    void release() override { state_->release(*this); }
-    std::string stateName() const override { return state_->name(); }
+    void escalate() override { state->escalate(*this); }
+    void hold() override { state->hold(*this); }
+    void release() override { state->release(*this); }
+    std::string stateName() const override { return state->name(); }
 
 
-    void start() override { state_->start(*this); }
-    void cancel() override { state_->cancel(*this); }
-    bool isComplete() const override { return state_->isFinal(); }
-    void setAssignee(Participant& p) { assignee_ = &p; }
-    void clearAssignee() { assignee_ = nullptr; }
-    Participant* getAssignee() const { return assignee_; }
-    void setResult(const WorkflowData& r) { result_ = r; }
+    void start() override { state->start(*this); }
+    void cancel() override { state->cancel(*this); }
+    bool isComplete() const override { return state->isFinal(); }
+    void setAssignee(Participant& p) { assignee = &p; }
+    void clearAssignee() { assignee = nullptr; }
+    Participant* getAssignee() const { return assignee; }
+    void setResult(const WorkflowData& r) { result = r; }
 
 protected:
-    WorkItemState* state_;
-    DependencySet dependencies_;
-    Role* requiredRole_;
-    Participant* assignee_ = nullptr;
-    AssignmentStrategy* assignmentPolicy_ = nullptr;
-    WorkflowEventPublisher* events_ = nullptr;
-    WorkflowData result_;
-    std::string lastFailureReason_;
-    std::string lastRejectionReason_;
+    WorkItemState* state;
+    DependencySet dependencies;
+    Role* requiredRole;
+    Participant* assignee = nullptr;
+    AssignmentStrategy* assignmentPolicy = nullptr;
+    WorkflowEventPublisher* events = nullptr;
+    WorkflowData result;
+    std::string lastFailureReason;
+    std::string lastRejectionReason;
 };
 
 #endif
