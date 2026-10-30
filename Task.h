@@ -9,15 +9,16 @@
 #include "WorkflowData.h"
 #include "DependencySet.h"
 #include "AssignmentStrategy.h"
-#include "WorkflowEventPublisher.h"
+#include "include/WorkflowEventPublisher.h"
+
 
 
 class Task : public WorkItem {
 public:
     Task(std::string id, std::string name, Role* requiredRole = nullptr)
         : WorkItem(std::move(id), std::move(name)),
-          state_(new CreatedState()),
-          requiredRole_(requiredRole) {}
+          state(new CreatedState()),
+          requiredRole(requiredRole) {}
 
     Task(const Task& other)
         : WorkItem(other.getId(), other.getName()),
@@ -40,26 +41,26 @@ public:
     void makeAvailable() override { state->makeAvailable(*this); }
 
     void assign(Participant& p, Participant& ) override {
-        state_->assign(*this, p);
+        state->assign(*this, p);
     }
     void acceptAssignment(Participant& ) override {
-        state_->acceptAssignment(*this);
+        state->acceptAssignment(*this);
     }
     void declineAssignment(Participant& ) override {
-        state_->declineAssignment(*this);
+        state->declineAssignment(*this);
     }
     void complete(WorkflowData result, Participant& ) override {
-        state_->complete(*this, result);
+        state->complete(*this, result);
     }
     void fail(const std::string& reason) override {
-        lastFailureReason_ = reason;
-        state_->fail(*this);
+        lastFailureReason = reason;
+        state->fail(*this);
     }
     void reject(const std::string& reason, Participant& ) override {
-        lastRejectionReason_ = reason;
+        lastRejectionReason = reason;
         state->reject(*this);
     }
-    void escalate() override { state_->escalate(*this); }
+    void escalate() override { state->escalate(*this); }
     void hold() override { state->hold(*this); }
     void release() override { state->release(*this); }
     std::string stateName() const override { return state->name(); }
@@ -68,7 +69,7 @@ public:
     void start() override { state->start(*this); }
     void cancel() override { state->cancel(*this); }
     bool isComplete() const override { return state->isFinal(); }
-    // clone() intentionally left pure virtual — see class comment.
+    // clone() intentionally left pure virtual 
 
     // Helpers concrete WorkItemState implementations call on Task
     void setAssignee(Participant& p) { assignee = &p; }
