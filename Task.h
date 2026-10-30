@@ -9,7 +9,6 @@
 #include "Participant.h"
 #include "WorkflowData.h"
 #include "DependencySet.h"
-//#include "AssignmentStrategy.h"
 #include "include/WorkflowEventPublisher.h"
 
 
@@ -110,7 +109,6 @@ WorkNodeIterator* createReadyIterator() override {
     void setAssignee(Participant& p) { assignee = &p; }
     void clearAssignee() { assignee = nullptr; }
     Participant* getAssignee() const { return assignee; }
-    const Role* getRequiredRole() const;
     void setResult(const WorkflowData& r) { result = r; }
 
 protected:
