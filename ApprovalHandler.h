@@ -1,13 +1,13 @@
 #ifndef APPROVAL_HANDLER_H
 #define APPROVAL_HANDLER_H
 
-#include "ApprovalRequest.h"
+class ApprovalRequest;
 
 class ApprovalHandler {
 protected:
-    ApprovalHandler* next_ = nullptr; // successor; owning policy agreed at integration
+    ApprovalHandler* next_ = nullptr; // non-owning successor
 public:
-    virtual ~ApprovalHandler() {}
+    virtual ~ApprovalHandler() = default;
     void setNext(ApprovalHandler* handler);
     virtual bool handle(ApprovalRequest& request);
 };
