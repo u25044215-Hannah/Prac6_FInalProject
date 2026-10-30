@@ -1,5 +1,7 @@
-#pragma once
-#include "Person5Forward.h"
+#ifndef APPROVAL_HANDLER_H
+#define APPROVAL_HANDLER_H
+
+#include "ApprovalRequest.h"
 
 class ApprovalHandler {
 protected:
@@ -9,3 +11,5 @@ public:
     void setNext(ApprovalHandler* handler);
     virtual bool handle(ApprovalRequest& request);
 };
+
+#endif // APPROVAL_HANDLER_H
