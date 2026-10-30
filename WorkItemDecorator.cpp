@@ -19,7 +19,7 @@ void ValidationDecorator::complete(WorkflowData result, Participant& actor) {
         if (!rule.evaluate(result)) {
             /* Blocks completion rather than forwarding it
             instead, with a reason identifying which rule rejected it.*/
-            inner_->fail("Validation failed: rule on field '" + rule.field + "' not satisfied");
+            inner_->fail("Validation failed: rule not satisfied");
             return;
         }
     }
@@ -42,19 +42,19 @@ void AuditDecorator::makeAvailable() {
     inner_->makeAvailable();
 }
 void AuditDecorator::assign(Participant& p, Participant& actor) {
-    if (history_) history_->appendNote(getName() + ": assign(" + p.id + ") by " + actor.id);
+    if (history_) history_->appendNote(getName() + ": assign(" + p.getId() + ") by " + actor.getId());
     inner_->assign(p, actor);
 }
 void AuditDecorator::acceptAssignment(Participant& actor) {
-    if (history_) history_->appendNote(getName() + ": acceptAssignment by " + actor.id);
+    if (history_) history_->appendNote(getName() + ": acceptAssignment by " + actor.getId());
     inner_->acceptAssignment(actor);
 }
 void AuditDecorator::declineAssignment(Participant& actor) {
-    if (history_) history_->appendNote(getName() + ": declineAssignment by " + actor.id);
+    if (history_) history_->appendNote(getName() + ": declineAssignment by " + actor.getId());
     inner_->declineAssignment(actor);
 }
 void AuditDecorator::complete(WorkflowData result, Participant& actor) {
-    if (history_) history_->appendNote(getName() + ": complete by " + actor.id);
+    if (history_) history_->appendNote(getName() + ": complete by " + actor.getId());
     inner_->complete(result, actor);
 }
 void AuditDecorator::fail(const std::string& reason) {
@@ -62,7 +62,7 @@ void AuditDecorator::fail(const std::string& reason) {
     inner_->fail(reason);
 }
 void AuditDecorator::reject(const std::string& reason, Participant& actor) {
-    if (history_) history_->appendNote(getName() + ": reject by " + actor.id + " - " + reason);
+    if (history_) history_->appendNote(getName() + ": reject by " + actor.getId() + " - " + reason);
     inner_->reject(reason, actor);
 }
 void AuditDecorator::escalate() {

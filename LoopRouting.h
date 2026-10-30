@@ -1,5 +1,6 @@
 #ifndef LOOP_ROUTING_H
 #define LOOP_ROUTING_H
+#include "Condition.h"
 #include "RoutingStrategy.h"
 
 class LoopRouting : public RoutingStrategy {
