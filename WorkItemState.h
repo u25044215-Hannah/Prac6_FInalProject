@@ -2,6 +2,10 @@
 #define WORKITEMSTATE_H
 
 #include <string>
+#include "Participant.h"
+#include "Task.h"
+#include "WorkItem.h"
+#include "WorkflowData.h"
 
 class Task;
 class WorkItemState {
