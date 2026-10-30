@@ -5,7 +5,7 @@
 #include "WorkflowDefinition.h"
 
 namespace {
-///deep-copy the template tree so the instance never shares state with it
+///Prototype step: deep-copy the definition's work tree into a new instance's work tree
 std::unique_ptr<WorkNode> cloneTemplate(const WorkflowDefinition& def) {
     std::unique_ptr<WorkNode> copy(def.getRoot().clone());
     if (!copy) 
@@ -16,8 +16,10 @@ std::unique_ptr<WorkNode> cloneTemplate(const WorkflowDefinition& def) {
 }
 }
 
-WorkflowInstance::WorkflowInstance(const std::string& id, const WorkflowDefinition& def, const WorkflowData& input)
-    : id_(id), definition_(&def), root_(cloneTemplate(def)), data_(input), outcome_(WorkflowOutcome::RUNNING), started_(false) {
+WorkflowInstance::WorkflowInstance(const std::string& id, const WorkflowDefinition& def,
+                                   const WorkflowData& input)
+    : id_(id), definition_(&def), root_(cloneTemplate(def)), data_(input),
+      outcome_(WorkflowOutcome::RUNNING), started_(false) {
     if (id_.empty()) 
     {
         throw InvalidOperationException("A workflow instance needs an id");
@@ -51,7 +53,8 @@ void WorkflowInstance::setOutcome(WorkflowOutcome outcome) {
     }
     if (isFinished()) 
     {
-        throw InvalidOperationException("Instance " + id_ + " already ended as " + outcomeToString(outcome_) + "; cannot change to " + outcomeToString(outcome));
+        throw InvalidOperationException("Instance " + id_ + " already ended as " +
+                                        outcomeToString(outcome_) + "; cannot change to " + outcomeToString(outcome));
     }
     outcome_ = outcome;
     history_.appendNote("Instance " + id_ + " outcome: " + outcomeToString(outcome_));
@@ -64,8 +67,7 @@ void WorkflowInstance::rebindTo(const WorkflowDefinition& def) {
     }
     if (def.getName() != definition_->getName()) 
     {
-        throw InvalidOperationException("Cannot rebind " + id_ + " from '" + definition_->getName() +
-                                        "' to a different process '" + def.getName() + "'");
+        throw InvalidOperationException("Cannot rebind " + id_ + " from '" + definition_->getName() + "' to a different process '" + def.getName() + "'");
     }
     definition_ = &def;
     history_.appendNote("Instance " + id_ + " rebound to " + def.label());
@@ -73,23 +75,22 @@ void WorkflowInstance::rebindTo(const WorkflowDefinition& def) {
 
 std::unique_ptr<InstanceSnapshot> WorkflowInstance::createSnapshot() const {
     std::unique_ptr<InstanceSnapshot> snap(new InstanceSnapshot());
-    snap->instanceId_ = id_;
-    snap->data_ = data_;
-    snap->outcome_ = outcome_;
-    snap->started_ = started_;
-    root_->captureState(snap->itemStates_);
+    snap->instanceId = id_;
+    snap->data = data_;
+    snap->outcome = outcome_;
+    snap->started = started_;
+    root_->captureState(snap->itemStates);
     return snap;
 }
 
 void WorkflowInstance::restore(const InstanceSnapshot& snapshot) {
-    if (snapshot.instanceId_ != id_) 
+    if (snapshot.instanceId != id_) 
     {
-        throw InvalidOperationException("Snapshot of " + snapshot.instanceId_ +
-                                        " cannot be restored into " + id_);
+        throw InvalidOperationException("Snapshot of " + snapshot.instanceId + " cannot be restored into " + id_);
     }
-    data_ = snapshot.data_;
-    outcome_ = snapshot.outcome_;
-    started_ = snapshot.started_;
-    root_->restoreState(snapshot.itemStates_);
+    data_ = snapshot.data;
+    outcome_ = snapshot.outcome; // deliberately bypasses setOutcome(): rollback may leave a final state
+    started_ = snapshot.started;
+    root_->restoreState(snapshot.itemStates);
     history_.appendNote("Instance " + id_ + " restored from checkpoint");
 }
