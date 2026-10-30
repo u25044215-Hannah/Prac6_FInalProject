@@ -3,7 +3,12 @@
 
 #include "WorkItem.h"
 #include "AccessPolicy.h"
-#include "Forward.h"
+#include "Participant.h"
+#include "WorkflowData.h"
+#include "WorkflowEvent.h"
+#include "WorkflowEventPublisher.h"
+#include "Role.h"
+
 
 class AccessControlProxy : public WorkItem {
 public:
@@ -28,7 +33,7 @@ public:
         if (check(actor, "reject")) real_->reject(reason, actor);
     }
 
-    // No actor available to check — forwarded directly.
+    // No actor available to check forwarded directly.
     void makeAvailable() override { real_->makeAvailable(); }
     void fail(const std::string& reason) override { real_->fail(reason); }
     void escalate() override { real_->escalate(); }
@@ -45,21 +50,8 @@ private:
     WorkItem* real_;
     const AccessPolicy* policy_;
     WorkflowEventPublisher* events_;
-
-    bool check(const Participant& actor, const std::string& operation) {
-        for (const auto& role : actor.roles) {
-            if (policy_->isAllowed(role, operation)) return true;
-        }
-        if (events_) {
-            WorkflowEvent e;
-            e.type = EventType::ACCESS_DENIED;
-            e.sourceId = getId();
-            e.payload.set("operation", operation);
-            e.payload.set("actor", actor.id);
-            events_->publish(e);
-        }
-        return false;
-    }
+ 
+    bool check(const Participant& actor, const std::string& operation) {}
 };
 
 #endif

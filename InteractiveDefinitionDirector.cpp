@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 #include "DefinitionCommands.h"
 #include "WorkflowDefinitionBuilder.h"

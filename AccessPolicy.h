@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include "Forward.h"
+#include "Role.h" 
 
 
 class AccessPolicy {
@@ -14,7 +14,7 @@ public:
     }
 
     bool isAllowed(const Role& r, const std::string& operation) const {
-        auto it = permitted_.find(r.name);
+        auto it = permitted_.find(r.getName());
         if (it == permitted_.end()) return false;
         return it->second.count(operation) > 0;
     }

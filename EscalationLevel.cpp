@@ -1,4 +1,5 @@
 #include "EscalationLevel.h"
+#include "EscalationRequest.h"
 #include <stdexcept>
 
 EscalationLevel::EscalationLevel(const std::string& role, int deadlineSeconds)

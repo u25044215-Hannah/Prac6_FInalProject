@@ -1,5 +1,7 @@
-#pragma once
-#include "Person5Forward.h"
+#ifndef ESCALATION_HANDLER_H
+#define ESCALATION_HANDLER_H
+
+#include "EscalationRequest.h"
 
 class EscalationHandler {
 protected:
@@ -9,3 +11,5 @@ public:
     void setNext(EscalationHandler* handler);
     virtual void handle(EscalationRequest& request);
 };
+
+#endif // ESCALATION_HANDLER_H

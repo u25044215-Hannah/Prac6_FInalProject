@@ -1,6 +1,8 @@
-#pragma once
+#ifndef RETRY_POLICY_H
+#define RETRY_POLICY_H
+
 #include "ResiliencePolicy.h"
-#include "Person5Forward.h"
+
 
 class RetryPolicy : public ResiliencePolicy {
 private:
@@ -9,3 +11,5 @@ public:
     explicit RetryPolicy(int maxAttempts);
     bool onFailure(IntegrationTask& task, int attempt) override;
 };
+
+#endif // RETRY_POLICY_H

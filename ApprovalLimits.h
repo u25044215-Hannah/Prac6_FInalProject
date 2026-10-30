@@ -1,5 +1,8 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef APPROVAL_LIMITS_H
+#define APPROVAL_LIMITS_H
+
+#include <set>
+#include "ApprovalRequest.h"
 
 class ApprovalLimits {
 private:
@@ -9,3 +12,5 @@ public:
     ApprovalLimits(int maxPriority, const std::set<std::string>& categories);
     bool covers(const ApprovalRequest& request) const;
 };
+
+#endif // APPROVAL_LIMITS_H

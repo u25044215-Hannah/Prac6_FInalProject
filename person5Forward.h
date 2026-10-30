@@ -25,5 +25,4 @@ class AssignmentStrategy;
 class RoutingStrategy;
 class MigrationStrategy;
 class ResiliencePolicy;
-class ApprovalHandler;
 class EscalationHandler;

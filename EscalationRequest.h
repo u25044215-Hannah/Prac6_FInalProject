@@ -1,5 +1,6 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef ESCALATION_REQUEST_H
+#define ESCALATION_REQUEST_H
+#include <string>
 
 class EscalationRequest {
 private:
@@ -11,3 +12,5 @@ public:
     int getLevelReached() const;
     void setLevelReached(int level);
 };
+
+#endif // ESCALATION_REQUEST_H

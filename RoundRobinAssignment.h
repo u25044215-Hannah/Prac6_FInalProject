@@ -1,6 +1,8 @@
-#pragma once
+#ifndef ROUND_ROBIN_ASSIGNMENT_H
+#define ROUND_ROBIN_ASSIGNMENT_H
+
 #include "AssignmentStrategy.h"
-#include "person5Forward.h"
+
 
 class RoundRobinAssignment : public AssignmentStrategy {
 private:
@@ -9,3 +11,5 @@ public:
     Participant* selectParticipant(const Task& item,
                                    const std::vector<Participant*>& candidates) override;
 };
+
+#endif // ROUND_ROBIN_ASSIGNMENT_H

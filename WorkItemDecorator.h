@@ -3,7 +3,10 @@
 
 #include <vector>
 #include "WorkItem.h"
-#include "Forward.h"
+#include "WorkflowData.h"
+#include "Condition.h"
+#include "ActionHistory.h"
+
 class WorkItemDecorator : public WorkItem {
 public:
     explicit WorkItemDecorator(WorkItem* inner)

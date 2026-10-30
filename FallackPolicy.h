@@ -1,6 +1,8 @@
-#pragma once
+#ifndef FALLBACK_POLICY_H
+#define FALLBACK_POLICY_H
+
 #include "ResiliencePolicy.h"
-#include "Person5Forward.h"
+#include "Task.h"
 
 class FallbackPolicy : public ResiliencePolicy {
 private:
@@ -9,3 +11,5 @@ public:
     explicit FallbackPolicy(const std::string& connector);
     bool onFailure(IntegrationTask& task, int attempt) override;
 };
+
+#endif // FALLBACK_POLICY_H

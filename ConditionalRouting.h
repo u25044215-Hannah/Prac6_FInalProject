@@ -1,3 +1,6 @@
+#ifndef CONDITIONAL_ROUTING_H
+#define CONDITIONAL_ROUTING_H
+
 #include "RoutingStrategy.h"
 #include "Condition.h"
 #include <vector>
@@ -12,3 +15,5 @@ public:
                                      const WorkflowData& data) override;
     bool isComplete(const WorkContainer& container) const override;
 };
+
+#endif // CONDITIONAL_ROUTING_H

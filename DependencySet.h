@@ -1,5 +1,9 @@
-#pragma once
-#include "person5Forward.h"
+#ifndef DEPENDENCY_SET_H
+#define DEPENDENCY_SET_H
+
+#include <string>
+#include <vector>
+#include "WorkNode.h"
 
 class DependencySet {
 private:
@@ -8,3 +12,5 @@ public:
     void add(const std::string& nodeId);
     bool isSatisfied(const WorkNode& root) const;
 };
+
+#endif // DEPENDENCY_SET_H
