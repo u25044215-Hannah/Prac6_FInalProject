@@ -1,94 +1,104 @@
 #include "DependencyResolver.h"
 
-#include "WorkflowEvent.h"
 #include "WorkflowInstance.h"
+#include "WorkflowEvent.h"
 #include "WorkNode.h"
-#include "WorkNodeIterator.h"
-#include "DepthFirstIterator.h"
 #include "Task.h"
+#include "DepthFirstIterator.h"
 
-#include <memory>
-
-// Connect this resolver to one specific workflow instance.
-DependencyResolver::DependencyResolver(WorkflowInstance& workflow)
-    : instance(workflow) {
+// Constructor
+DependencyResolver::DependencyResolver(WorkflowInstance& instance)
+    : instance(instance)
+{
 }
 
-
 // Observer Pattern:
-// Called when the publisher delivers an event.
-void DependencyResolver::onEvent(const WorkflowEvent& event) {
-
-    // Only process work-item state changes.
-    if (event.getType() != EventType::WORK_ITEM_STATE_CHANGED) {
+// React when a task changes state.
+void DependencyResolver::onEvent(const WorkflowEvent& event)
+{
+    // Only process task state-change events.
+    if (event.getType() != EventType::WORK_ITEM_STATE_CHANGED)
+    {
         return;
     }
 
-    // Ignore events belonging to another workflow instance.
-    if (event.getInstanceId() != instance.getId()) {
+    // Ignore events belonging to other workflow instances.
+    if (event.getInstanceId() != instance.getId())
+    {
         return;
     }
 
     WorkNode& root = instance.getRoot();
 
-    // Find the task that generated the event.
+    // Find the task that published the event.
     WorkNode* source = root.findById(event.getSourceId());
 
-    if (source == nullptr) {
+    if (!source)
+    {
         return;
     }
 
-    // Confirm the source is an executable task.
     Task* completedTask = dynamic_cast<Task*>(source);
 
-    if (completedTask == nullptr) {
+    if (!completedTask)
+    {
         return;
     }
 
-    // Only successful completion can unlock dependent tasks.
-    if (completedTask->stateName() != "Completed") {
+    // Only unlock dependent tasks when a prerequisite
+    // has successfully completed.
+    if (completedTask->stateName() != "Completed")
+    {
         return;
     }
 
-    // Recheck tasks that may now be eligible.
+    // Check whether any dependent tasks can become available.
     unlockReadyTasks();
 }
 
-
-// Check which tasks can become available.
-void DependencyResolver::unlockReadyTasks() {
-
+// Dependency Resolution:
+// Unlock tasks whose prerequisites have all been completed.
+void DependencyResolver::unlockReadyTasks()
+{
     WorkNode& root = instance.getRoot();
 
-    // Traverse the workflow using the existing Iterator pattern.
-    std::unique_ptr<WorkNodeIterator> iterator(
-        new DepthFirstIterator(&root)
-    );
+    // Traverse the entire workflow tree.
+    DepthFirstIterator iterator(&root);
 
-    while (iterator->hasNext()) {
+    while (iterator.hasNext())
+    {
+        WorkNode* node = iterator.next();
 
-        WorkNode* node = iterator->next();
-
-        if (node == nullptr) {
+        if (!node)
+        {
             continue;
         }
 
-        // Only executable tasks have task dependencies.
         Task* task = dynamic_cast<Task*>(node);
 
-        if (task == nullptr) {
+        if (!task)
+        {
             continue;
         }
 
-        // Do not interfere with tasks that have already progressed.
-        if (task->stateName() != "Created") {
+        // Only consider tasks that have not yet become available.
+        if (task->stateName() != "Created")
+        {
             continue;
         }
 
-        // Check prerequisites against this instance's work tree.
-        if (task->getDependencies().isSatisfied(root)) {
+        // IMPORTANT:
+        // Tasks without explicit dependencies must be controlled
+        // by normal workflow routing, not the dependency resolver.
+        if (!task->getDependencies().hasDependencies())
+        {
+            continue;
+        }
 
-            // State Pattern: Created -> Available.
+        // Unlock the task only when ALL prerequisites
+        // have successfully completed.
+        if (task->getDependencies().isSatisfied(root))
+        {
             task->makeAvailable();
         }
     }

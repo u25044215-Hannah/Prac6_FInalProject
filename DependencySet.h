@@ -8,9 +8,19 @@
 class DependencySet {
 private:
     std::vector<std::string> prerequisiteIds_;
+
 public:
     void add(const std::string& nodeId);
+
     bool isSatisfied(const WorkNode& root) const;
+
+    /**
+     * @brief Checks whether this dependency set contains prerequisites.
+     * @return True if at least one prerequisite exists.
+     */
+    bool hasDependencies() const {
+        return !prerequisiteIds_.empty();
+    }
 };
 
 #endif // DEPENDENCY_SET_H
