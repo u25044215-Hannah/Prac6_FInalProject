@@ -1,0 +1,79 @@
+# Doxyfile for Prac6_FInalProject
+# Run from the repository root:   doxygen Doxyfile
+# Output:                          docs/html/index.html
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = "Prac6_FInalProject"
+PROJECT_BRIEF          = "COS 214 workflow engine"
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = NO
+OUTPUT_LANGUAGE        = English
+OPTIMIZE_OUTPUT_FOR_C  = NO
+
+#---------------------------------------------------------------------------
+# Input: all C++ sources and headers in the repo root and below
+#---------------------------------------------------------------------------
+INPUT                  = .
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h \
+                         *.hpp \
+                         *.cpp
+EXCLUDE                = build \
+                         docs \
+                         COS214_GUI \
+                         .git
+EXCLUDE_PATTERNS       = */build/* \
+                         */docs/* \
+                         */COS214_GUI/* \
+                         */.git/*
+USE_MDFILE_AS_MAINPAGE = README.md
+
+#---------------------------------------------------------------------------
+# What to extract
+#---------------------------------------------------------------------------
+# EXTRACT_ALL = YES documents every class/function even without a comment,
+# so the build is useful before every file has Doxygen comments.
+# Switch to NO later to see only what is actually documented.
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_ANON_NSPACES   = YES
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = YES
+BUILTIN_STL_SUPPORT    = YES
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+
+#---------------------------------------------------------------------------
+# Warnings (shown in the terminal)
+#---------------------------------------------------------------------------
+QUIET                  = NO
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+WARN_AS_ERROR          = NO
+
+#---------------------------------------------------------------------------
+# Output formats
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_TREEVIEW      = YES
+GENERATE_LATEX         = NO
+GENERATE_XML           = NO
+
+#---------------------------------------------------------------------------
+# Diagrams
+#---------------------------------------------------------------------------
+# Set HAVE_DOT = YES (and install Graphviz) to get class and call diagrams.
+# Left off so the build works on a machine without Graphviz.
+HAVE_DOT               = NO
+CLASS_DIAGRAMS         = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
