@@ -285,7 +285,18 @@ static void scenarioMenu(Scenario& s) {
         if (!(std::cin >> option)) { if (std::cin.eof()) return; std::cin.clear(); std::cin.ignore(10000,'\n'); std::cout<<"Invalid input\n"; continue; }
         if(option==0) return;
         try {
-            if (option>=1 && option<=3) listNodes(s,option);
+            
+if (option == 3) {
+    // Move newly created tasks into the Available state.
+    makeAvailable(s);
+
+    // Use the real ReadyItemIterator to display available tasks.
+    listNodes(s, option);
+}
+else if (option == 1 || option == 2) {
+    listNodes(s, option);
+}
+
             else if (option==4) report(s);
             else if (option==5) {
                 // Reset test state using a fresh independently cloned instance.

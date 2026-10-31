@@ -38,3 +38,10 @@ run: all
 demo:
 	$(MAKE) -f Makefile.integration
 	./whole_project_demo
+
+
+.PHONY: gui
+
+gui:
+	$(MAKE) -f Makefile.integration
+	python3 COS214_GUI/gui_server.py
