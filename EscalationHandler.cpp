@@ -1,0 +1,19 @@
+#include "EscalationHandler.h"
+#include <stdexcept>
+
+EscalationHandler::~EscalationHandler() = default;
+
+void EscalationHandler::setNext(EscalationHandler* handler) {
+    if (handler == this) {
+        throw std::invalid_argument("An escalation handler cannot follow itself");
+    }
+    next_ = handler;
+}
+
+void EscalationHandler::handle(EscalationRequest& request) {
+    if (next_ != nullptr) {
+        next_->handle(request);
+    } else {
+        throw std::runtime_error("Escalation chain ended without a terminal handler");
+    }
+}

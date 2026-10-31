@@ -38,5 +38,5 @@ void TividyEngine::submit(std::unique_ptr<WorkflowCommand> cmd, const std::strin
     {
         throw InvalidOperationException("Instance " + instanceId + " is already finished (" + outcomeToString(instance.getOutcome()) + ")");
     }
-    commands_.submit(std::move(cmd), instance);
+    commands_.submit(cmd.release(), instance);
 }

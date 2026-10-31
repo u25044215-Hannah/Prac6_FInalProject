@@ -15,7 +15,7 @@ const WorkflowDefinition* VersionManager::resolve(const DefinitionRepository& re
     return def;
 }
 
-std:size_t VersionManager::onNewVersion(const WorkflowDefinition& newDef) {
+std::size_t VersionManager::onNewVersion(const WorkflowDefinition& newDef) {
     if (!policy_) 
     {
     return 0;
