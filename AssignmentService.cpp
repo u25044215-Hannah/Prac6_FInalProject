@@ -1,5 +1,6 @@
 #include "AssignmentService.h"
 #include "ParticipantDirectory.h"
+#include "Task.h"
 #include <stdexcept>
 
 AssignmentService::AssignmentService(ParticipantDirectory* directory)

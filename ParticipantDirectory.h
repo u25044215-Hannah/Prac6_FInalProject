@@ -1,5 +1,9 @@
 #pragma once
-#include "person5Forward.h"
+//#include "person5Forward.h"
+#include <map>
+#include <string>
+#include "Participant.h"
+#include "Role.h"
 
 class ParticipantDirectory {
 private:
