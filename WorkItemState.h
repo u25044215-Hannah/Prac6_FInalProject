@@ -1,15 +1,20 @@
+
 #ifndef WORKITEMSTATE_H
 #define WORKITEMSTATE_H
 
 #include <string>
+
 #include "Participant.h"
 #include "WorkflowData.h"
 #include "IllegalTransitionException.h"
 
+// Forward declaration to avoid circular dependency with Task.h
 class Task;
+
 class WorkItemState;
-// Builds a new state object from its name() ("InProgress", ...). Returns
-// nullptr for an unknown name. Used when restoring a checkpoint.
+
+// Rebuild a state from its name when restoring a checkpoint.
+// Returns nullptr for an unknown state name.
 WorkItemState* makeStateByName(const std::string& stateName);
 
 class WorkItemState {
@@ -33,7 +38,8 @@ public:
     virtual bool isFinal() const { return false; }
 
 protected:
-    [[noreturn]] void reject_transition(const std::string& operation) const;
+    [[noreturn]]
+    void reject_transition(const std::string& operation) const;
 };
 
 class CreatedState : public WorkItemState {
@@ -47,6 +53,7 @@ public:
     void assign(Task& t, Participant& p) override;
     void hold(Task& t) override;
     void cancel(Task& t) override;
+
     std::string name() const override { return "Available"; }
 };
 
@@ -57,6 +64,7 @@ public:
     void start(Task& t) override;
     void escalate(Task& t) override;
     void cancel(Task& t) override;
+
     std::string name() const override { return "Assigned"; }
 };
 
@@ -68,6 +76,7 @@ public:
     void hold(Task& t) override;
     void escalate(Task& t) override;
     void cancel(Task& t) override;
+
     std::string name() const override { return "InProgress"; }
 };
 
@@ -75,6 +84,7 @@ class OnHoldState : public WorkItemState {
 public:
     void release(Task& t) override;
     void cancel(Task& t) override;
+
     std::string name() const override { return "OnHold"; }
 };
 
@@ -83,6 +93,7 @@ public:
     void assign(Task& t, Participant& p) override;
     void fail(Task& t) override;
     void cancel(Task& t) override;
+
     std::string name() const override { return "Escalated"; }
 };
 
@@ -110,4 +121,4 @@ public:
     bool isFinal() const override { return true; }
 };
 
-#endif
+#endif // WORKITEMSTATE_H

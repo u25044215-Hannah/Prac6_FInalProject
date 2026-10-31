@@ -1,0 +1,18 @@
+# Runs available cross-module engine tests independently of the broken project-wide target.
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -g -I.
+SRC := WholeProject_IntegrationMain.cpp WorkNode.cpp WorkContainer.cpp Stage.cpp SubProcess.cpp \
+ DepthFirstIterator.cpp LevelOrderIterator.cpp ReadyItemIterator.cpp \
+ ProgressVisitor.cpp BottleneckVisitor.cpp CycleTimeVisitor.cpp DefinitionValidationVisitor.cpp \
+ WorkItemState.cpp Participant.cpp Role.cpp WorkflowDefinition.cpp WorkflowInstance.cpp \
+ WorkflowOutcome.cpp WorkflowData.cpp ActionHistory.cpp InstanceSnapshot.cpp WorkflowCommand.cpp \
+ CommandProcessor.cpp AssignCommand.cpp StartCommand.cpp CompleteCommand.cpp RecoveryManager.cpp \
+ RoleAssignment.cpp SkillAssignment.cpp
+.PHONY: all test clean
+all: whole_project_demo
+whole_project_demo: $(SRC)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $@
+test: whole_project_demo
+	./whole_project_demo --test
+clean:
+	rm -f whole_project_demo

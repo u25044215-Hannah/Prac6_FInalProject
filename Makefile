@@ -1,7 +1,7 @@
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -g
 
-SOURCES := $(filter-out main.cpp MiniMain_Testing.cpp,$(wildcard *.cpp))
+SOURCES := $(filter-out WholeProject_IntegrationMain.cpp work_behaviour_test.cpp,$(wildcard *.cpp))
 # Sources that live in include/ (the filename-with-space duplicates are not built).
 INCLUDE_SOURCES := include/ConnectorRegistry.cpp include/WorkflowEvent.cpp include/WorkflowEventPublisher.cpp
 OBJECTS := $(patsubst %.cpp,build/%.o,$(SOURCES)) $(patsubst include/%.cpp,build/include_%.o,$(INCLUDE_SOURCES))
@@ -27,3 +27,14 @@ test: $(TEST_BINARY)
 
 clean:
 	rm -rf build
+
+.PHONY: run
+
+run: all
+	./build/MiniMain_Testing
+
+.PHONY: demo
+
+demo:
+	$(MAKE) -f Makefile.integration
+	./whole_project_demo
