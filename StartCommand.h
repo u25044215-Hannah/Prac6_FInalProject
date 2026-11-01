@@ -1,8 +1,6 @@
 /**
  * @file StartCommand.h
  * @brief Command that starts work on an assigned item
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- * 
  * Pattern: Command -> ConcreteCommand
  */
 

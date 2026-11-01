@@ -9,10 +9,6 @@
 #include <memory>
 #include <stdexcept>
 
-// ======================================================
-// STATE PATTERN TESTS
-// ======================================================
-
 TEST_CASE("State - Complete task lifecycle") {
 
     Role engineer("Engineer");
@@ -42,10 +38,6 @@ TEST_CASE("State - Complete task lifecycle") {
     CHECK(task->stateName() == "Completed");
 }
 
-// ======================================================
-// INVALID STATE TRANSITION
-// ======================================================
-
 TEST_CASE("State - Completed task rejects hold") {
 
     Role engineer("Engineer");
@@ -64,10 +56,6 @@ TEST_CASE("State - Completed task rejects hold") {
 
     CHECK_THROWS(task.hold());
 }
-
-// ======================================================
-// PROTOTYPE PATTERN
-// ======================================================
 
 TEST_CASE("Prototype - Cloning creates independent task") {
 

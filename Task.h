@@ -48,10 +48,6 @@ public:
         delete state;
     }
 
-    // =====================================================
-    // OBSERVER PATTERN
-    // =====================================================
-
     // Connect this task to its workflow instance.
     // The publisher is owned elsewhere.
     void setEventPublisher(
@@ -62,10 +58,6 @@ public:
         instanceId = workflowInstanceId;
     }
 
-    // =====================================================
-    // ITERATOR PATTERN
-    // =====================================================
-
     WorkNodeIterator* createIterator() override {
         return new DepthFirstIterator(this);
     }
@@ -73,10 +65,6 @@ public:
     WorkNodeIterator* createReadyIterator() override {
         return new ReadyItemIterator(this);
     }
-
-    // =====================================================
-    // ASSIGNMENT STRATEGY
-    // =====================================================
 
     Role* getRequiredRole() const {
         return requiredRole;
@@ -89,10 +77,6 @@ public:
     void addRequiredSkill(const std::string& skill) {
         requiredSkills.push_back(skill);
     }
-
-    // =====================================================
-    // MEMENTO PATTERN
-    // =====================================================
 
     void captureState(
         std::map<std::string, std::string>& out
@@ -117,10 +101,6 @@ public:
             setState(restored, false);
         }
     }
-
-    // =====================================================
-    // STATE PATTERN + OBSERVER PATTERN
-    // =====================================================
 
     // Changes the task's state.
     //
@@ -168,10 +148,6 @@ public:
         }
     }
 
-    // =====================================================
-    // DEPENDENCY MANAGEMENT
-    // =====================================================
-
     const DependencySet& getDependencies() const {
         return dependencies;
     }
@@ -186,15 +162,7 @@ public:
         });
     }
 
-    // =====================================================
-    // PROTOTYPE PATTERN
-    // =====================================================
-
     virtual Task* clone() const override = 0;
-
-    // =====================================================
-    // STATE PATTERN OPERATIONS
-    // =====================================================
 
     void assign(Participant& p, Participant&) override {
         performStateOperation([this, &p]() {
@@ -264,10 +232,6 @@ public:
         return state->name();
     }
 
-    // =====================================================
-    // WORKNODE INTERFACE
-    // =====================================================
-
     void start() override {
         performStateOperation([this]() {
             state->start(*this);
@@ -283,10 +247,6 @@ public:
     bool isComplete() const override {
         return state->isFinal();
     }
-
-    // =====================================================
-    // HELPERS USED BY STATE IMPLEMENTATIONS
-    // =====================================================
 
     void setAssignee(Participant& p) {
         assignee = &p;
@@ -305,10 +265,6 @@ public:
     }
 
 protected:
-
-    // =====================================================
-    // STATE OPERATION SAFETY
-    // =====================================================
 
     // Tracks active state operations.
     int stateOperationDepth = 0;
@@ -351,10 +307,6 @@ protected:
             clearRetiredStates();
         }
     }
-
-    // =====================================================
-    // TASK DATA
-    // =====================================================
 
     WorkItemState* state;
 

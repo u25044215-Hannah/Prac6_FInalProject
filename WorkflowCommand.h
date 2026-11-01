@@ -1,8 +1,6 @@
 /**
  * @file WorkflowCommand.h
  * @brief  Abstract Command for every recorded action in a workflow instance
- * @author Janke Rall, u24571238 (Command, History & Recovery)
- * 
  * Pattern: Command -> Command
  */
 

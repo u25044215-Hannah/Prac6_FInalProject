@@ -1,8 +1,6 @@
 /**
  * @file RejectCommand.h
  * @brief Command that rejects a work itemm with a reason
- * @author Janke Rall, u24571238 (Command, History & Command)
- * 
  * Pattern: Command -> ConcreteCommand 
  */
 

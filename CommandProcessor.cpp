@@ -1,7 +1,6 @@
 /**
  * @file CommandProcessor.cpp
  * @brief Invoker that executes, records and undoes workflow commands.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
  */
 
 #include "CommandProcessor.h"

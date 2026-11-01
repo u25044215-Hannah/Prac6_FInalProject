@@ -1,8 +1,6 @@
 /**
  * @file CompleteCommand.h
- * @brief command that completes work item with result data
- * @author Janke Rall, u24571238 (Command, History & Recovery)
- * 
+ * @brief command that completes work item with result data 
  * Pattern: Command -> ConcreteCommand
  */
 

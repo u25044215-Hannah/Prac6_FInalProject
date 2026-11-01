@@ -1,8 +1,6 @@
 /**
  * @file CancelRequestCommand.h
- * @brief MacroCommand that cancels a whole workflow instance.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- * 
+ * @brief MacroCommand that cancels a whole workflow instance. 
  * Pattern: Command -> ConcreteCommand (macro/composite command)
  */
 

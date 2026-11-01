@@ -1,7 +1,6 @@
 /**
  * @file WorkflowCommand.cpp
  * @brief Shared behaviour of all workflow commands.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
  */
 
 #include "WorkflowCommand.h"

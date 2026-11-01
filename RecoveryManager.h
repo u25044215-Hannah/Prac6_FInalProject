@@ -1,8 +1,6 @@
 /**
  * @file RecoveryManager.h
  * @brief Stores named checkpoints of workflow instances and rolls back to them.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- *
  * Pattern: Memento -> Caretaker.
  */
 
