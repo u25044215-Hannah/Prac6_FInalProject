@@ -3,7 +3,7 @@
 
 #include <string>
 #include "EventType.h"
-#include "WorkflowData.h"
+#include "../WorkflowData.h"
 
 class WorkflowEvent {
 private:
