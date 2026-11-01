@@ -1,4 +1,3 @@
-
 #ifndef TASK_H
 #define TASK_H
 
@@ -12,7 +11,10 @@
 #include "DependencySet.h"
 #include "DepthFirstIterator.h"
 #include "ReadyItemIterator.h"
+
+// Observer Pattern
 #include "include/WorkflowEventPublisher.h"
+#include "include/WorkflowEvent.h"
 
 // Forward declaration prevents circular dependency
 // between Task.h and AssignmentStrategy.h
@@ -27,7 +29,9 @@ public:
           state(new CreatedState()),
           requiredRole(requiredRole) {}
 
-    // Prototype: copy the task definition and reset its state.
+    // Prototype Pattern:
+    // Copy task configuration but reset execution state
+    // and Observer connections.
     Task(const Task& other)
         : WorkItem(other),
           state(new CreatedState()),
@@ -35,15 +39,33 @@ public:
           requiredRole(other.requiredRole),
           requiredSkills(other.requiredSkills),
           assignmentPolicy(other.assignmentPolicy),
-          events(other.events) {}
+          events(nullptr) {}
 
     Task& operator=(const Task&) = delete;
 
     ~Task() override {
+        clearRetiredStates();
         delete state;
     }
 
-    // Iterator Pattern
+    // =====================================================
+    // OBSERVER PATTERN
+    // =====================================================
+
+    // Connect this task to its workflow instance.
+    // The publisher is owned elsewhere.
+    void setEventPublisher(
+        WorkflowEventPublisher* publisher,
+        const std::string& workflowInstanceId
+    ) {
+        events = publisher;
+        instanceId = workflowInstanceId;
+    }
+
+    // =====================================================
+    // ITERATOR PATTERN
+    // =====================================================
+
     WorkNodeIterator* createIterator() override {
         return new DepthFirstIterator(this);
     }
@@ -52,7 +74,10 @@ public:
         return new ReadyItemIterator(this);
     }
 
-    // Assignment Strategy
+    // =====================================================
+    // ASSIGNMENT STRATEGY
+    // =====================================================
+
     Role* getRequiredRole() const {
         return requiredRole;
     }
@@ -65,7 +90,10 @@ public:
         requiredSkills.push_back(skill);
     }
 
-    // Memento Pattern
+    // =====================================================
+    // MEMENTO PATTERN
+    // =====================================================
+
     void captureState(
         std::map<std::string, std::string>& out
     ) const override {
@@ -85,19 +113,64 @@ public:
             makeStateByName(it->second);
 
         if (restored != nullptr) {
-            setState(restored);
+            // Restoring a checkpoint must not publish events.
+            setState(restored, false);
         }
     }
 
-    // State Pattern
-    void setState(WorkItemState* s) {
-        if (s == state) {
+    // =====================================================
+    // STATE PATTERN + OBSERVER PATTERN
+    // =====================================================
+
+    // Changes the task's state.
+    //
+    // Old states are kept alive while a state operation
+    // is executing, preventing premature deletion.
+    //
+    // notifyObservers=false is used during restoration.
+    void setState(
+        WorkItemState* s,
+        bool notifyObservers = true
+    ) {
+        if (s == nullptr || s == state) {
             return;
         }
 
-        delete state;
+        const std::string oldState = state->name();
+        const std::string newState = s->name();
+
+        WorkItemState* previousState = state;
+
+        // Install the new state.
         state = s;
+
+        // Delay deletion if a state operation is active.
+        if (stateOperationDepth > 0) {
+            retiredStates.push_back(previousState);
+        } else {
+            delete previousState;
+        }
+
+        // Automatically notify observers when the state changes.
+        if (notifyObservers &&
+            events != nullptr &&
+            !instanceId.empty() &&
+            oldState != newState) {
+
+            WorkflowEvent event(
+                EventType::WORK_ITEM_STATE_CHANGED,
+                getId(),
+                instanceId,
+                WorkflowData()
+            );
+
+            events->publish(event);
+        }
     }
+
+    // =====================================================
+    // DEPENDENCY MANAGEMENT
+    // =====================================================
 
     const DependencySet& getDependencies() const {
         return dependencies;
@@ -108,34 +181,54 @@ public:
     }
 
     void makeAvailable() override {
-        state->makeAvailable(*this);
+        performStateOperation([this]() {
+            state->makeAvailable(*this);
+        });
     }
 
-    // Concrete subclasses implement their own clone.
+    // =====================================================
+    // PROTOTYPE PATTERN
+    // =====================================================
+
     virtual Task* clone() const override = 0;
 
+    // =====================================================
+    // STATE PATTERN OPERATIONS
+    // =====================================================
+
     void assign(Participant& p, Participant&) override {
-        state->assign(*this, p);
+        performStateOperation([this, &p]() {
+            state->assign(*this, p);
+        });
     }
 
     void acceptAssignment(Participant&) override {
-        state->acceptAssignment(*this);
+        performStateOperation([this]() {
+            state->acceptAssignment(*this);
+        });
     }
 
     void declineAssignment(Participant&) override {
-        state->declineAssignment(*this);
+        performStateOperation([this]() {
+            state->declineAssignment(*this);
+        });
     }
 
     void complete(
         WorkflowData result,
         Participant&
     ) override {
-        state->complete(*this, result);
+        performStateOperation([this, &result]() {
+            state->complete(*this, result);
+        });
     }
 
     void fail(const std::string& reason) override {
         lastFailureReason = reason;
-        state->fail(*this);
+
+        performStateOperation([this]() {
+            state->fail(*this);
+        });
     }
 
     void reject(
@@ -143,39 +236,58 @@ public:
         Participant&
     ) override {
         lastRejectionReason = reason;
-        state->reject(*this);
+
+        performStateOperation([this]() {
+            state->reject(*this);
+        });
     }
 
     void escalate() override {
-        state->escalate(*this);
+        performStateOperation([this]() {
+            state->escalate(*this);
+        });
     }
 
     void hold() override {
-        state->hold(*this);
+        performStateOperation([this]() {
+            state->hold(*this);
+        });
     }
 
     void release() override {
-        state->release(*this);
+        performStateOperation([this]() {
+            state->release(*this);
+        });
     }
 
     std::string stateName() const override {
         return state->name();
     }
 
-    // WorkNode interface
+    // =====================================================
+    // WORKNODE INTERFACE
+    // =====================================================
+
     void start() override {
-        state->start(*this);
+        performStateOperation([this]() {
+            state->start(*this);
+        });
     }
 
     void cancel() override {
-        state->cancel(*this);
+        performStateOperation([this]() {
+            state->cancel(*this);
+        });
     }
 
     bool isComplete() const override {
         return state->isFinal();
     }
 
-    // Helpers used by state implementations
+    // =====================================================
+    // HELPERS USED BY STATE IMPLEMENTATIONS
+    // =====================================================
+
     void setAssignee(Participant& p) {
         assignee = &p;
     }
@@ -193,17 +305,75 @@ public:
     }
 
 protected:
+
+    // =====================================================
+    // STATE OPERATION SAFETY
+    // =====================================================
+
+    // Tracks active state operations.
+    int stateOperationDepth = 0;
+
+    // Holds replaced states until operations finish.
+    std::vector<WorkItemState*> retiredStates;
+
+    // Deletes old state objects once it is safe.
+    void clearRetiredStates() {
+        for (WorkItemState* oldState : retiredStates) {
+            delete oldState;
+        }
+
+        retiredStates.clear();
+    }
+
+    // Executes a state operation safely.
+    //
+    // The previous state remains alive until the
+    // operation finishes, including when exceptions occur.
+    template <typename Operation>
+    void performStateOperation(Operation operation) {
+        ++stateOperationDepth;
+
+        try {
+            operation();
+        } catch (...) {
+            --stateOperationDepth;
+
+            if (stateOperationDepth == 0) {
+                clearRetiredStates();
+            }
+
+            throw;
+        }
+
+        --stateOperationDepth;
+
+        if (stateOperationDepth == 0) {
+            clearRetiredStates();
+        }
+    }
+
+    // =====================================================
+    // TASK DATA
+    // =====================================================
+
     WorkItemState* state;
+
     DependencySet dependencies;
 
     Role* requiredRole;
+
     std::vector<std::string> requiredSkills;
 
     Participant* assignee = nullptr;
 
-    // Non-owning strategy and event publisher pointers
+    // Non-owning strategy pointer.
     AssignmentStrategy* assignmentPolicy = nullptr;
+
+    // Non-owning Observer publisher pointer.
     WorkflowEventPublisher* events = nullptr;
+
+    // Identifies the workflow instance that owns this task.
+    std::string instanceId;
 
     WorkflowData result;
 
