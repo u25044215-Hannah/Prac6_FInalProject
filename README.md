@@ -165,3 +165,16 @@ Work on a feature branch, test locally, and open a pull request against the team
 ## Project context
 
 Developed as a team project for **COS 214 Practical 6** at the **University of Pretoria**. Consult the practical specification and the project's UML diagrams for the full assignment requirements and intended class relationships.
+
+## Group Members
+
+| Student Name | Student Number |
+| -------- | -------- |
+| Shelby Bodenstein | u25038967 |
+| Hannah Diedrick | u25044215 |
+| Kelly Rademeyer | u25571878 |
+| Janke Rall | u24571238 |
+| Livia Webber | u24607852 |
+| Michael Harding | u25328086 |
+| Tauhir September | u24750982 |
+
