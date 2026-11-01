@@ -14,10 +14,6 @@
 
 #include <memory>
 
-// ======================================================
-// OBSERVER + DEPENDENCY TESTS
-// ======================================================
-
 TEST_CASE("Observer - Automatically unlock dependent tasks") {
 
     Stage* root = new Stage("root", "Workflow");
@@ -90,10 +86,6 @@ TEST_CASE("Observer - Automatically unlock dependent tasks") {
     CHECK(b2->stateName() == "Created");
     CHECK(a2->stateName() == "Created");
 }
-
-// ======================================================
-// COMMAND -> STATE -> OBSERVER -> DEPENDENCY
-// ======================================================
 
 TEST_CASE("Observer - CompleteCommand unlocks dependent task") {
 

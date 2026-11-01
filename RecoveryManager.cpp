@@ -1,6 +1,5 @@
 /**
  * @file RecoveryManager.cpp
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
  */
 
 #include "RecoveryManager.h"

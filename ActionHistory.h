@@ -1,7 +1,6 @@
 /**
  * @file ActionHistory.h
  * @brief Append-only audit trail of one workflow instance.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
  */
 
 #ifndef TIVIDY_ACTIONHISTORY_H

@@ -38,10 +38,6 @@ std::unique_ptr<WorkNode> cloneTemplate(
 
 }
 
-// =====================================================
-// CONSTRUCTOR
-// =====================================================
-
 WorkflowInstance::WorkflowInstance(
     const std::string& id,
     const WorkflowDefinition& def,
@@ -81,10 +77,6 @@ WorkflowInstance::WorkflowInstance(
     );
 }
 
-// =====================================================
-// DESTRUCTOR
-// =====================================================
-
 WorkflowInstance::~WorkflowInstance() {
     // Remove the listener before destroying the resolver.
     if (dependencyResolver_) {
@@ -95,10 +87,6 @@ WorkflowInstance::~WorkflowInstance() {
     }
 }
 
-// =====================================================
-// WORKFLOW INFORMATION
-// =====================================================
-
 std::string WorkflowInstance::getDefinitionName() const {
     return definition_->getName();
 }
@@ -106,10 +94,6 @@ std::string WorkflowInstance::getDefinitionName() const {
 int WorkflowInstance::getDefinitionVersion() const {
     return definition_->getVersion();
 }
-
-// =====================================================
-// START WORKFLOW
-// =====================================================
 
 void WorkflowInstance::start() {
     if (started_) {
@@ -134,10 +118,6 @@ void WorkflowInstance::start() {
         "Instance " + id_ + " started"
     );
 }
-
-// =====================================================
-// WORKFLOW OUTCOME
-// =====================================================
 
 void WorkflowInstance::setOutcome(
     WorkflowOutcome outcome
@@ -164,10 +144,6 @@ void WorkflowInstance::setOutcome(
         outcomeToString(outcome_)
     );
 }
-
-// =====================================================
-// VERSION MANAGEMENT
-// =====================================================
 
 void WorkflowInstance::rebindTo(
     const WorkflowDefinition& def
@@ -196,10 +172,6 @@ void WorkflowInstance::rebindTo(
     );
 }
 
-// =====================================================
-// MEMENTO PATTERN — CREATE SNAPSHOT
-// =====================================================
-
 std::unique_ptr<InstanceSnapshot>
 WorkflowInstance::createSnapshot() const {
 
@@ -216,10 +188,6 @@ WorkflowInstance::createSnapshot() const {
 
     return snap;
 }
-
-// =====================================================
-// MEMENTO PATTERN — RESTORE SNAPSHOT
-// =====================================================
 
 void WorkflowInstance::restore(
     const InstanceSnapshot& snapshot
@@ -248,10 +216,6 @@ void WorkflowInstance::restore(
         " restored from checkpoint"
     );
 }
-
-// =====================================================
-// OBSERVER PATTERN — CONNECT TASKS
-// =====================================================
 
 void WorkflowInstance::connectTaskObservers() {
 

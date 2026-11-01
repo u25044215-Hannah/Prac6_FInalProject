@@ -1,8 +1,6 @@
 /**
  * @file InstanceSnapshot.cpp
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- *
- * Memento only holds state. WorkflowInstance (Person 1) fills the fields in createSnapshot() and reads them in restore().
+ * Memento only holds state. WorkflowInstance fills the fields in createSnapshot() and reads them in restore().
  */
 
 #include "InstanceSnapshot.h"

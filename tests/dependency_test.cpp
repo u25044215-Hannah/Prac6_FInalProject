@@ -1,4 +1,3 @@
-
 #include "vendor/doctest.h"
 
 #include "DependencySet.h"
@@ -6,7 +5,6 @@
 #include "HumanTask.h"
 #include "WorkItemState.h"
 
-// TEST 1: No dependencies
 TEST_CASE("DependencySet - No prerequisites") {
     Stage root("root", "Workflow");
     DependencySet none;
@@ -14,7 +12,6 @@ TEST_CASE("DependencySet - No prerequisites") {
     CHECK(none.isSatisfied(root));
 }
 
-// TEST 2: Incomplete prerequisite
 TEST_CASE("DependencySet - Incomplete prerequisite") {
     Stage root("root", "Workflow");
     root.add(new HumanTask("A", "First task"));
@@ -25,7 +22,6 @@ TEST_CASE("DependencySet - Incomplete prerequisite") {
     CHECK_FALSE(dependencies.isSatisfied(root));
 }
 
-// TEST 3: Completed prerequisite
 TEST_CASE("DependencySet - Completed prerequisite") {
     Stage root("root", "Workflow");
 
@@ -40,7 +36,6 @@ TEST_CASE("DependencySet - Completed prerequisite") {
     CHECK(dependencies.isSatisfied(root));
 }
 
-// TEST 4: Missing prerequisite
 TEST_CASE("DependencySet - Missing prerequisite") {
     Stage root("root", "Workflow");
 
@@ -50,7 +45,6 @@ TEST_CASE("DependencySet - Missing prerequisite") {
     CHECK_FALSE(dependencies.isSatisfied(root));
 }
 
-// TEST 5: Multiple prerequisites, one incomplete
 TEST_CASE("DependencySet - One prerequisite incomplete") {
     Stage root("root", "Workflow");
 
@@ -69,7 +63,6 @@ TEST_CASE("DependencySet - One prerequisite incomplete") {
     CHECK_FALSE(dependencies.isSatisfied(root));
 }
 
-// TEST 6: All prerequisites completed
 TEST_CASE("DependencySet - All prerequisites completed") {
     Stage root("root", "Workflow");
 

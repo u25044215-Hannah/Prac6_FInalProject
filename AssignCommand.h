@@ -1,8 +1,6 @@
 /**
  * @file AssignCommand.h
  * @brief Command that assigns a work item to a participant
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- * 
  * Pattern: Command -> ConcreteCommand
  */
 

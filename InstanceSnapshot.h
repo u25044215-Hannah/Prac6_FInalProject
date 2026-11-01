@@ -1,8 +1,6 @@
 /**
  * @file InstanceSnapshot.h
  * @brief Opaque saved state of one workflow instance.
- * @author Janke Rall, u24571238 (Commands, History & Recovery)
- *
  * Pattern: Memento -> Memento.
  */
 

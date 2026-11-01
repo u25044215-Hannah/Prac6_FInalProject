@@ -1,15 +1,6 @@
 
 "use strict";
 
-// ============================================================
-// TIVIDY WORKFLOW STUDIO
-// Frontend application
-// ============================================================
-
-// -------------------------
-// DOM utilities
-// -------------------------
-
 const $ = selector => document.querySelector(selector);
 
 const $$ = selector =>
@@ -69,11 +60,6 @@ function stateBadge(state) {
         </span>
     `;
 }
-
-// ============================================================
-// APPLICATION STATE
-// ============================================================
-
 let scenarios = [];
 let sid = "";
 let currentTab = "dashboard";
@@ -139,10 +125,6 @@ function unmetDependencies(task) {
     });
 }
 
-// ============================================================
-// NOTIFICATIONS AND API
-// ============================================================
-
 function toast(message, isError = false) {
     const node = element("toast");
 
@@ -206,10 +188,6 @@ async function mutate(payload) {
     }
 }
 
-// ============================================================
-// SCENARIO LOADING
-// ============================================================
-
 async function loadScenarios() {
     try {
         scenarios = await api("/api/scenarios");
@@ -247,10 +225,6 @@ async function loadScenarios() {
     }
 }
 
-// ============================================================
-// PAGE NAVIGATION
-// ============================================================
-
 function go(tab) {
     if (!pageNames[tab]) return;
 
@@ -276,10 +250,6 @@ function go(tab) {
 
     render();
 }
-
-// ============================================================
-// MAIN RENDER FUNCTION
-// ============================================================
 
 function render() {
     const current = scenario();
@@ -341,10 +311,6 @@ function render() {
         loadHistory();
     }
 }
-
-// ============================================================
-// DASHBOARD
-// ============================================================
 
 function renderDashboard(
     current,
@@ -422,10 +388,6 @@ function renderDashboard(
 
     setHTML("overview-tree", tree);
 }
-
-// ============================================================
-// WORKFLOW BUILDER
-// ============================================================
 
 function renderBuilder(current) {
     const allTasks = getTasks(current);
@@ -506,10 +468,6 @@ function renderBuilder(current) {
         }
     }
 }
-
-// ============================================================
-// INSPECT TASK
-// ============================================================
 
 function inspectTask(task) {
     selected = {
@@ -598,10 +556,6 @@ function inspectTask(task) {
     `);
 }
 
-// ============================================================
-// INSPECT STAGE
-// ============================================================
-
 function inspectStage(stage) {
     selected = {
         type: "stage",
@@ -626,10 +580,6 @@ function inspectStage(stage) {
         </button>
     `);
 }
-
-// ============================================================
-// TASK STATE OPERATIONS
-// ============================================================
 
 function taskActions(task) {
     const mapping = {
@@ -660,10 +610,6 @@ function taskActions(task) {
 
     return mapping[task.status] || [];
 }
-
-// ============================================================
-// TASK BOARD
-// ============================================================
 
 function renderBoard(current) {
     const filter = element("filter")?.value || "all";
@@ -800,10 +746,6 @@ function renderBoard(current) {
     );
 }
 
-// ============================================================
-// REPORTS
-// ============================================================
-
 function renderReports(current, allTasks, progress) {
     setText("completion-pct", `${progress}%`);
 
@@ -906,10 +848,6 @@ function renderReports(current, allTasks, progress) {
     `);
 }
 
-// ============================================================
-// AUDIT HISTORY AND CHECKPOINTS
-// ============================================================
-
 async function loadHistory() {
     const requestedScenario = sid;
 
@@ -992,10 +930,6 @@ async function loadHistory() {
         toast(error.message, true);
     }
 }
-
-// ============================================================
-// FORM AND MODAL UTILITIES
-// ============================================================
 
 function field(key, label, extra = {}) {
     return {
@@ -1081,10 +1015,6 @@ function modal(title, description, fields, callback) {
     dialog.showModal();
 }
 
-// ============================================================
-// OPTIONAL PREREQUISITE FIELD
-// ============================================================
-
 function dependencyField() {
     const options = [
         {
@@ -1107,10 +1037,6 @@ function dependencyField() {
         }
     );
 }
-
-// ============================================================
-// ADD STAGE
-// ============================================================
 
 function addStage() {
     if (!sid) {
@@ -1137,10 +1063,6 @@ function addStage() {
         })
     );
 }
-
-// ============================================================
-// ADD TASK
-// ============================================================
 
 function addTask(stageId) {
     if (!stageId) {
@@ -1195,10 +1117,6 @@ function addTask(stageId) {
         })
     );
 }
-
-// ============================================================
-// ADD TASK FROM TASK BOARD
-// ============================================================
 
 function addTaskFromBoard() {
     const current = scenario();
@@ -1269,10 +1187,6 @@ function addTaskFromBoard() {
     );
 }
 
-// ============================================================
-// DELETE TASK
-// ============================================================
-
 async function deleteTask(taskId) {
     const task = findTask(taskId);
 
@@ -1320,10 +1234,6 @@ async function deleteTask(taskId) {
     }
 }
 
-// ============================================================
-// TASK EXECUTION
-// ============================================================
-
 async function taskAction(taskId, operation) {
     if (operation === "assign") {
         modal(
@@ -1356,10 +1266,6 @@ async function taskAction(taskId, operation) {
         operation
     });
 }
-
-// ============================================================
-// CREATE SCENARIO
-// ============================================================
 
 function createScenario() {
     modal(
@@ -1428,10 +1334,6 @@ function createScenario() {
     );
 }
 
-// ============================================================
-// RESET SCENARIO
-// ============================================================
-
 async function resetScenario() {
     if (!sid) return;
 
@@ -1447,10 +1349,6 @@ async function resetScenario() {
         scenario_id: sid
     });
 }
-
-// ============================================================
-// DELETE SCENARIO
-// ============================================================
 
 async function deleteScenario() {
     const current = scenario();
@@ -1478,10 +1376,6 @@ async function deleteScenario() {
         selected = null;
     }
 }
-
-// ============================================================
-// CHECKPOINTS
-// ============================================================
 
 function createCheckpoint() {
     if (!sid) return;
@@ -1520,10 +1414,6 @@ async function restoreCheckpoint(checkpointId) {
         checkpoint_id: checkpointId
     });
 }
-
-// ============================================================
-// C++ INTEGRATION TEST LABORATORY
-// ============================================================
 
 async function runCpp(action) {
     setText("engine-summary", "Running " + action + "...");
@@ -1580,10 +1470,6 @@ async function runCpp(action) {
         );
     }
 }
-
-// ============================================================
-// EVENT HANDLERS
-// ============================================================
 
 function attachEvents() {
     // Sidebar navigation
@@ -1785,10 +1671,6 @@ function attachEvents() {
         }
     );
 }
-
-// ============================================================
-// START APPLICATION
-// ============================================================
 
 async function initialize() {
     attachEvents();

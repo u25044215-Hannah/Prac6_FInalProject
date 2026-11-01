@@ -8,7 +8,6 @@
 
 class WorkNode;
 
-// Iterator interface from Figure 5.2.
 // Returned WorkNode pointers are non-owning.
 /**
  * @brief Represents the WorkNodeIterator component of the workflow engine.

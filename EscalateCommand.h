@@ -1,8 +1,6 @@
 /**
  * @file EscalateCommand.h
  * @brief command that escalates a work item
- * @author Janke Rall, u24571238 (Command, History & Recovery)
- * 
  * Pattern: Command -> ConcreteCommand
  */
 
