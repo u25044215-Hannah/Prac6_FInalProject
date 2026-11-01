@@ -7,7 +7,10 @@ TARGET := build/TividyTests
 # Production sources only, excluding all programs with their own main()
 EXCLUDED := \
     WholeProject_IntegrationMain.cpp \
-    MiniMain_Testing.cpp
+    MiniMain_Testing.cpp \
+    dependency_test.cpp \
+    observer_dependency_test.cpp \
+    work_behaviour_test.cpp
 
 SOURCES := $(filter-out $(EXCLUDED),$(wildcard *.cpp))
 
