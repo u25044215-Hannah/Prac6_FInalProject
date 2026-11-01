@@ -5,6 +5,8 @@ No third-party Python packages; binds to 127.0.0.1 only.
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 import json, os, re, subprocess, sys, webbrowser
+import workflow_store as store
+from urllib.parse import urlparse, parse_qs
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parent
@@ -53,7 +55,38 @@ def run_demo(industry, action):
 
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self,*args,**kwargs): super().__init__(*args,directory=str(HERE),**kwargs)
+    def reply(self, value, code=200):
+        raw=json.dumps(value).encode('utf-8')
+        self.send_response(code)
+        self.send_header('Content-Type','application/json; charset=utf-8')
+        self.send_header('Cache-Control','no-store')
+        self.send_header('Content-Length',str(len(raw)))
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def do_GET(self):
+        url=urlparse(self.path)
+        if url.path.startswith('/api/'):
+            try:
+                qs=parse_qs(url.query)
+                if url.path=='/api/scenarios': value=store.list_scenarios()
+                elif url.path=='/api/events': value=store.events(qs.get('scenario_id',[''])[0])
+                elif url.path=='/api/checkpoints': value=store.checkpoints(qs.get('scenario_id',[''])[0])
+                elif url.path=='/api/health': value={'ok':True,'bridge':BINARY.is_file(),'mode':'SQLite workspace; C++ demo isolated'}
+                else: return self.reply({'error':'Unknown route'},404)
+                return self.reply(value)
+            except ValueError as err:return self.reply({'error':str(err)},400)
+        return super().do_GET()
+
     def do_POST(self):
+        if self.path=='/api/workflow':
+            try:
+                n=int(self.headers.get('Content-Length','0'))
+                if n<1 or n>20000:raise ValueError('Invalid request size')
+                data=json.loads(self.rfile.read(n))
+                return self.reply(store.perform(data))
+            except (ValueError,TypeError,json.JSONDecodeError) as err:
+                return self.reply({'error':str(err)},400)
         if self.path!='/api/run': self.send_error(404);return
         try:
             n=int(self.headers.get('Content-Length','0'))
@@ -72,6 +105,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__=='__main__':
     port=int(os.environ.get('TIVIDY_GUI_PORT','8765'))
+    store.init()
     print(f'TIVIDY GUI running at http://127.0.0.1:{port}',flush=True)
     if not BINARY.exists():print('NOTE: run make -f Makefile.integration in the project root first.',flush=True)
     ThreadingHTTPServer(('127.0.0.1',port),Handler).serve_forever()
