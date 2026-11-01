@@ -1,0 +1,41 @@
+
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -g -I. -Iinclude -Itests
+
+TARGET := build/TividyTests
+
+# Production sources only, excluding all programs with their own main()
+EXCLUDED := \
+    WholeProject_IntegrationMain.cpp \
+    MiniMain_Testing.cpp
+
+SOURCES := $(filter-out $(EXCLUDED),$(wildcard *.cpp))
+
+
+INCLUDE_SOURCES := \
+    include/ConnectorRegistry.cpp \
+    include/WorkflowEvent.cpp \
+    include/WorkflowEventPublisher.cpp \
+    include/DependencyResolver.cpp
+
+
+# Only doctest test files are linked into this executable.
+TEST_SOURCES := \
+    tests/TestMain.cpp \
+    tests/dependency_test.cpp \
+    tests/observer_dependency_test.cpp \
+    tests/work_behaviour_test.cpp
+
+.PHONY: all test clean
+
+all: $(TARGET)
+
+$(TARGET): $(SOURCES) $(INCLUDE_SOURCES) $(TEST_SOURCES)
+	@mkdir -p build
+	$(CXX) $(CXXFLAGS) $(SOURCES) $(INCLUDE_SOURCES) $(TEST_SOURCES) -o $(TARGET)
+
+test: $(TARGET)
+	./$(TARGET)
+
+clean:
+	rm -f $(TARGET)
