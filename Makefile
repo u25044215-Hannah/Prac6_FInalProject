@@ -1,7 +1,7 @@
 
 
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -g -I. -Iinclude
+CXXFLAGS := -std=c++11 -Wall -Wextra -pedantic -g -I. -Iinclude
 
 .PHONY: all run test demo gui clean
 
