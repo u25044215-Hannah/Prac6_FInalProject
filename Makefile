@@ -35,3 +35,18 @@ gui: all
 # Remove generated integration executable
 clean:
 	rm -f whole_project_demo
+
+
+# ==========================================
+# UNIT TESTING
+# ==========================================
+
+.PHONY: test-unit test-all
+
+test-unit:
+	$(MAKE) -f Makefile.tests test
+
+# Run both doctest and integration testing
+test-all:
+	$(MAKE) -f Makefile.tests test
+	$(MAKE) -f Makefile.integration test
