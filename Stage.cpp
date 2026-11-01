@@ -1,3 +1,8 @@
+/**
+ * @file Stage.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "Stage.h"
 
 #include "WorkNodeVisitor.h"    // Person 7

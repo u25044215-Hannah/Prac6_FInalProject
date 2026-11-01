@@ -1,3 +1,8 @@
+/**
+ * @file ForwardRecovery.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ForwardRecovery.h"
 #include "WorkflowInstance.h"
 #include "WorkflowDefinition.h"

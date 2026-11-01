@@ -1,3 +1,8 @@
+/**
+ * @file RoundRobinAssignment.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "RoundRobinAssignment.h"
 
 Participant* RoundRobinAssignment::selectParticipant(

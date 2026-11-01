@@ -25,7 +25,14 @@ public:
      */
     StartCommand(WorkItem& item, Participant* actor);
 
+    /**
+     * @brief Performs the execute operation.
+     */
     void execute() override;
+    /**
+     * @brief Performs the describe operation.
+     * @return The result of the operation.
+     */
     std::string describe() const override;
 };
 

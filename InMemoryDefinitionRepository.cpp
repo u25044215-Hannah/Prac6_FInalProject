@@ -1,3 +1,8 @@
+/**
+ * @file InMemoryDefinitionRepository.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "InMemoryDefinitionRepository.h"
 #include "TividyException.h"
 

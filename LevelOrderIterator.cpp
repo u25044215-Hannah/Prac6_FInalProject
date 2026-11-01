@@ -1,3 +1,8 @@
+/**
+ * @file LevelOrderIterator.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "LevelOrderIterator.h"
 #include "WorkNode.h"
 #include "WorkContainer.h"

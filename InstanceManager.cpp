@@ -1,3 +1,8 @@
+/**
+ * @file InstanceManager.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "InstanceManager.h"
 #include "TividyException.h"
 #include "WorkflowDefinition.h"

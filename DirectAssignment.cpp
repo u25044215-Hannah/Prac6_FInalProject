@@ -1,3 +1,8 @@
+/**
+ * @file DirectAssignment.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DirectAssignment.h"
 #include "Task.h"
 #include "Participant.h"
@@ -12,3 +17,4 @@ Participant* DirectAssignment::selectParticipant(
     }
     return nullptr;
 }
+

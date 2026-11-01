@@ -26,6 +26,9 @@ class WorkflowCommand;
 
 class ActionHistory {
 public:
+    /**
+     * @brief Performs the ActionHistory operation.
+     */
     ActionHistory();
 
     /** @brief Deletes every command this history owns. */
@@ -40,9 +43,19 @@ public:
     /** @brief Records a free-text event, e.g. "Rolled back to 'before-run'". */
     void appendNote(const std::string& text);
 
+    /**
+     * @brief Performs the first operation.
+     * @param reports Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief Executed commands, oldest first (used by undo and reports). */
     const std::vector<WorkflowCommand*>& entries() const;
 
+    /**
+     * @brief Performs the first operation.
+     * @param TUI Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief Readable timeline of commands and notes, oldest first (used by the TUI). */
     const std::vector<std::string>& log() const;
 

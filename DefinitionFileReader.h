@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionFileReader.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef DEFINITIONFILEREADER_H
 #define DEFINITIONFILEREADER_H
 
@@ -5,9 +10,20 @@
 #include <vector>
 #include "WorkflowDirector.h"
 
+/**
+ * @brief Represents the DefinitionFileReader component of the workflow engine.
+ */
 class DefinitionFileReader : public WorkflowDirector {
 public:
+    /**
+     * @brief Performs the DefinitionFileReader operation.
+     * @param path Parameter used by this operation.
+     * @return The result of the operation.
+     */
     explicit DefinitionFileReader(const std::string& path);
+    /**
+     * @brief Performs the DefinitionFileReader operation.
+     */
     virtual ~DefinitionFileReader();
 
     /// Throws std::runtime_error if the file cannot be opened or a line is

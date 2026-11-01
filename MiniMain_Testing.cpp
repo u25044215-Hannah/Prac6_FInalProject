@@ -1,3 +1,8 @@
+/**
+ * @file MiniMain_Testing.cpp
+ * @brief Implements project functionality.
+ */
+
 #include <iostream>
 
 int main() {

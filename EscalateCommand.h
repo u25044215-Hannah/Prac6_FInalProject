@@ -30,7 +30,14 @@ public:
 
     EscalateCommand(WorkItem& item, const std::string& reason, Participant* actor = nullptr);
 
+    /**
+     * @brief Performs the execute operation.
+     */
     void execute() override;
+    /**
+     * @brief Performs the describe operation.
+     * @return The result of the operation.
+     */
     std::string describe() const override;
 private: 
     std::string reason;

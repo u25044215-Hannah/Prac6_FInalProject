@@ -25,7 +25,13 @@ class WorkflowInstance;
 
 class CommandProcessor {
 public:
+    /**
+     * @brief Performs the CommandProcessor operation.
+     */
     CommandProcessor();
+    /**
+     * @brief Performs the CommandProcessor operation.
+     */
     ~CommandProcessor();
 
     /**

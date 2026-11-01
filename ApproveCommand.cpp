@@ -29,3 +29,4 @@ void ApproveCommand::execute() {
 std::string ApproveCommand::describe() const {
     return "Approve '" + receiver->getId() + "' (by " + actorName() + ")";
 }
+

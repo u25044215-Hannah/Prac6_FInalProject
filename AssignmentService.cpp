@@ -1,3 +1,8 @@
+/**
+ * @file AssignmentService.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "AssignmentService.h"
 #include "ParticipantDirectory.h"
 #include "Task.h"
@@ -13,3 +18,4 @@ Participant* AssignmentService::assign(Task& item) {
     // Do not select an arbitrary participant while that contract is undefined.
     throw std::logic_error("AssignmentService::assign requires Task.h and its assignment policy interface");
 }
+

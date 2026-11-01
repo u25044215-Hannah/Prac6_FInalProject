@@ -20,11 +20,27 @@ class WorkflowDefinition;
  */
 class InstanceManager {
 public:
+    /**
+     * @brief Performs the InstanceManager operation.
+     */
     InstanceManager() : counter_(0) {}
+    /**
+     * @brief Performs the InstanceManager operation.
+     */
     ~InstanceManager() {}
     ///create (but do not start) an instance
     WorkflowInstance* createInstance(const WorkflowDefinition& def, const WorkflowData& input);
+    /**
+     * @brief Performs the find operation.
+     * @param id Parameter used by this operation.
+     * @return The result of the operation.
+     */
     WorkflowInstance* find(const std::string& id) const;
+    /**
+     * @brief Performs the get operation.
+     * @param id Parameter used by this operation.
+     * @return The result of the operation.
+     */
     WorkflowInstance& get(const std::string& id) const;
     ///exact definition version
     std::vector<WorkflowInstance*> runningInstancesOf(const WorkflowDefinition& def) const;
@@ -32,6 +48,10 @@ public:
     std::vector<WorkflowInstance*> runningInstancesOf(const std::string& name) const;
     ///all instances, oldest first
     std::vector<WorkflowInstance*> all() const;
+    /**
+     * @brief Performs the count operation.
+     * @return The result of the operation.
+     */
     std::size_t count() const { return order_.size(); }
 
 private:

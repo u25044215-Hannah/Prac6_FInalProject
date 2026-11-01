@@ -1,3 +1,8 @@
+/**
+ * @file VersionManager.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "VersionManager.h"
 #include "TividyException.h"
 #include "WorkflowDefinition.h"

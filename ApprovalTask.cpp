@@ -1,3 +1,8 @@
+/**
+ * @file ApprovalTask.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ApprovalTask.h"
 #include "ApprovalHandler.h"
 #include "ApprovalRequest.h"

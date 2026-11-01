@@ -1,3 +1,8 @@
+/**
+ * @file ApprovalLimits.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ApprovalLimits.h"
 #include "ApprovalRequest.h"
 #include "WorkflowData.h"

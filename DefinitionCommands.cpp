@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionCommands.cpp
+ * @brief Implements project functionality.
+ */
+
 #ifndef DEFINITIONCOMMANDS_H
 #define DEFINITIONCOMMANDS_H
 

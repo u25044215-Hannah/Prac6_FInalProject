@@ -1,3 +1,8 @@
+/**
+ * @file ParallelRouting.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ParallelRouting.h"
 #include "WorkContainer.h"
 #include "WorkNode.h"

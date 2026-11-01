@@ -1,3 +1,8 @@
+/**
+ * @file WorkContainer.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef WORKCONTAINER_H
 #define WORKCONTAINER_H
 
@@ -10,8 +15,14 @@
 class RoutingStrategy;   // Person 5
 class WorkflowData;      // Person 1
 
+/**
+ * @brief Represents the WorkContainer component of the workflow engine.
+ */
 class WorkContainer : public WorkNode {
 public:
+    /**
+     * @brief Performs the WorkContainer operation.
+     */
     virtual ~WorkContainer();
 
     /// Take ownership of n and set its parent to this. n must have no parent.
@@ -27,6 +38,10 @@ public:
      */
     void replaceChild(WorkNode* oldNode, WorkNode* replacement);
 
+    /**
+     * @brief Performs the getChildren operation.
+     * @return The result of the operation.
+     */
     const std::vector<WorkNode*>& getChildren() const;
 
     /// Called by a child when it completes: asks the routing strategy (or the
@@ -41,10 +56,22 @@ public:
     // --- Strategy ---
     /// Shared with clones (strategies are configuration, not per-run state).
     void setRouting(std::shared_ptr<RoutingStrategy> r);
+    /**
+     * @brief Performs the getRouting operation.
+     * @return The result of the operation.
+     */
     std::shared_ptr<RoutingStrategy> getRouting() const;
 
     // --- Routing label from the builder ---
+    /**
+     * @brief Performs the setRoutingKey operation.
+     * @param key Parameter used by this operation.
+     */
     void setRoutingKey(const std::string& key);
+    /**
+     * @brief Performs the getRoutingKey operation.
+     * @return The result of the operation.
+     */
     const std::string& getRoutingKey() const;
 
     // --- Iterator ---
@@ -56,6 +83,10 @@ public:
 
     /// Memento: delegate to every child.
     virtual void captureState(std::map<std::string, std::string>& out) const;
+    /**
+     * @brief Performs the restoreState operation.
+     * @param in Parameter used by this operation.
+     */
     virtual void restoreState(const std::map<std::string, std::string>& in);
 
 protected:

@@ -41,6 +41,11 @@ public:
     /** @brief Vritual so subclasses are destroyed correctly through a abase pointer */
     virtual ~WorkflowCommand();
 
+    /**
+     * @brief Performs the it operation.
+     * @param IllegalTransitionException Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief Preforms the action on receiver. May throw if receiver's current state does not allow it (IllegalTransitionException) */
     virtual void execute() = 0;
 
@@ -52,15 +57,29 @@ public:
      */
     virtual void undo();
 
+    /**
+     * @brief Performs the undo operation.
+     * @return The result of the operation.
+     */
     /** @brief True id undo() is supported. Default -> False */
     virtual bool isUndoable() const;
 
     /** @brief True once this command has been undone, so it is never undone twice. */
     bool isUndone() const;
 
+    /**
+     * @brief Performs the command operation.
+     * @param nullptr Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief The participant who issued the command (nullptr = system). */
     Participant* getActor() const;
 
+    /**
+     * @brief Performs the created operation.
+     * @param requested Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief When the command was created (i.e. when the action was requested). */
     std::time_t getTimestamp() const;
 protected:

@@ -1,3 +1,8 @@
+/**
+ * @file ApprovalRequest.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ApprovalRequest.h"
 #include "WorkflowData.h"
 
@@ -11,3 +16,4 @@ void ApprovalRequest::setDecision(const std::string& decision, const std::string
     decision_ = decision;
     reason_ = reason;
 }
+

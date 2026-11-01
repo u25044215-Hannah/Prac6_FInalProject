@@ -1,3 +1,8 @@
+/**
+ * @file IntegrationTask.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "IntegrationTask.h"
 #include <exception>
 #include <stdexcept>

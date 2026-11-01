@@ -20,24 +20,71 @@ class ApprovalHandler;
  */
 class WorkflowDefinition {
 public:
+    /**
+     * @brief Performs the WorkflowDefinition operation.
+     * @param name Parameter used by this operation.
+     * @param root Parameter used by this operation.
+     */
     WorkflowDefinition(const std::string& name, std::unique_ptr<WorkNode> root);
+    /**
+     * @brief Performs the WorkflowDefinition operation.
+     */
     ~WorkflowDefinition();
 
+    /**
+     * @brief Performs the getName operation.
+     * @return The result of the operation.
+     */
     const std::string& getName() const { return name_; }
+    /**
+     * @brief Performs the getVersion operation.
+     * @return The result of the operation.
+     */
     int getVersion() const { return version_; }
+    /**
+     * @brief Performs the isPublished operation.
+     * @return The result of the operation.
+     */
     bool isPublished() const { return published_; }
 
+    /**
+     * @brief Performs the getRoot operation.
+     * @return The result of the operation.
+     */
     const WorkNode& getRoot() const;
+    /**
+     * @brief Performs the getEscalationChain operation.
+     * @return The result of the operation.
+     */
     EscalationHandler* getEscalationChain() const { return escalation_.get(); }
+    /**
+     * @brief Performs the getApprovalChain operation.
+     * @return The result of the operation.
+     */
     ApprovalHandler* getApprovalChain() const { return approval_.get(); }
 
     /// @throws InvalidOperationException if already published
     void setEscalationChain(std::shared_ptr<EscalationHandler> head);
+    /**
+     * @brief Performs the setApprovalChain operation.
+     * @param head Parameter used by this operation.
+     */
     void setApprovalChain(std::shared_ptr<ApprovalHandler> head);
 
+    /**
+     * @brief Performs the setVersion operation.
+     * @param version Parameter used by this operation.
+     */
     void setVersion(int version);
+    /**
+     * @brief Performs the publish operation.
+     */
     void publish();
     
+    /**
+     * @brief Performs the label operation.
+     * @return The result of the operation.
+     */
     std::string label() const;
 
 private:

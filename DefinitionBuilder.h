@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionBuilder.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef DEFINITIONBUILDER_H
 #define DEFINITIONBUILDER_H
 

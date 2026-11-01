@@ -1,3 +1,8 @@
+/**
+ * @file DecoratorFactory.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef DECORATORFACTORY_H
 #define DECORATORFACTORY_H
 
@@ -6,6 +11,9 @@
 
 class WorkItem;
 
+/**
+ * @brief Represents the DecoratorFactory component of the workflow engine.
+ */
 class DecoratorFactory {
 public:
     /// Creator: receives the item to wrap, returns the new decorator.

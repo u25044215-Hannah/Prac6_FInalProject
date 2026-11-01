@@ -1,3 +1,8 @@
+/**
+ * @file DependencySet.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DependencySet.h"
 #include <algorithm>
 #include <stdexcept>

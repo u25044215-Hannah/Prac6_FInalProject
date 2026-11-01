@@ -30,6 +30,9 @@ class WorkflowInstance;
  */
 class RecoveryManager {
 public:
+    /**
+     * @brief Performs the RecoveryManager operation.
+     */
     RecoveryManager();
 
     /** @brief Deletes every stored snapshot. */
@@ -54,12 +57,22 @@ public:
     /** @brief Deletes a checkpoint that is no longer needed. Does nothing if absent. */
     void discard(const WorkflowInstance& inst, const std::string& label);
 
+    /**
+     * @brief Performs the instance operation.
+     * @param outcome Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief Deletes every checkpoint of an instance (call when it reaches an outcome). */
     void discardAll(const WorkflowInstance& inst);
 
     /** @brief True if the checkpoint exists. */
     bool hasCheckpoint(const WorkflowInstance& inst, const std::string& label) const;
 
+    /**
+     * @brief Performs the checkpoints operation.
+     * @param leaks Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief Total number of stored checkpoints (useful in tests to check for leaks). */
     std::size_t count() const;
 

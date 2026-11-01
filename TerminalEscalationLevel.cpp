@@ -1,3 +1,8 @@
+/**
+ * @file TerminalEscalationLevel.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "TerminalEscalationLevel.h"
 #include "EscalationRequest.h"
 

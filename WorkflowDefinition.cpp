@@ -1,3 +1,8 @@
+/**
+ * @file WorkflowDefinition.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkflowDefinition.h"
 #include "WorkNode.h"
 #include "TividyException.h"

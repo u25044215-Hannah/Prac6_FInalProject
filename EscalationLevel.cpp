@@ -1,3 +1,8 @@
+/**
+ * @file EscalationLevel.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "EscalationLevel.h"
 #include "EscalationRequest.h"
 #include <stdexcept>
@@ -24,3 +29,4 @@ void EscalationLevel::handle(EscalationRequest& request) {
         EscalationHandler::handle(request);
     }
 }
+

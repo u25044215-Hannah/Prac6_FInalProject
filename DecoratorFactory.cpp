@@ -1,3 +1,8 @@
+/**
+ * @file DecoratorFactory.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DecoratorFactory.h"
 
 #include <map>

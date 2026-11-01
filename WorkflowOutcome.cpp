@@ -1,3 +1,8 @@
+/**
+ * @file WorkflowOutcome.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkflowOutcome.h"
 
 std::string outcomeToString(WorkflowOutcome outcome) {

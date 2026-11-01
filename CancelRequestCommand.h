@@ -61,7 +61,14 @@ public:
 
     void addStep(WorkflowCommand* step);
 
+    /**
+     * @brief Performs the execute operation.
+     */
     void execute() override;
+    /**
+     * @brief Performs the describe operation.
+     * @return The result of the operation.
+     */
     std::string describe() const override;
 private:
     WorkflowInstance* instance;
