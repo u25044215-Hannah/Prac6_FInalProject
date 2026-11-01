@@ -1,7 +1,7 @@
 # Runs available cross-module engine tests independently of the broken project-wide target.
 
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -g -I. -Iinclude
+CXXFLAGS := -std=c++11 -Wall -Wextra -pedantic -g -I. -Iinclude
 
 SRC := WholeProject_IntegrationMain.cpp WorkNode.cpp WorkContainer.cpp Stage.cpp SubProcess.cpp \
  DepthFirstIterator.cpp LevelOrderIterator.cpp ReadyItemIterator.cpp \
