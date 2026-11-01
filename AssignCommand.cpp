@@ -38,3 +38,4 @@ bool AssignCommand::isUndoable() const {
 std::string AssignCommand::describe() const {
     return "Assign '" + receiver->getId() + "' to " + assignee->getId() + " (by " + actorName() + ")";
 }
+

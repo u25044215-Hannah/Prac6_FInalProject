@@ -1,3 +1,8 @@
+/**
+ * @file RoleAssignment.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "RoleAssignment.h"
 #include "Task.h"
 #include "Participant.h"

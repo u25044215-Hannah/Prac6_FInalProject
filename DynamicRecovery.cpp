@@ -1,3 +1,8 @@
+/**
+ * @file DynamicRecovery.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DynamicRecovery.h"
 #include "WorkflowInstance.h"
 #include "WorkflowDefinition.h"

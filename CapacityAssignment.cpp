@@ -1,3 +1,8 @@
+/**
+ * @file CapacityAssignment.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "CapacityAssignment.h"
 #include "Participant.h"
 #include <limits>

@@ -1,3 +1,8 @@
+/**
+ * @file WholeProject_IntegrationMain.cpp
+ * @brief Implements project functionality.
+ */
+
 // Person 7 demonstration: two industry scenarios, tree traversal, reporting,
 // filtering, scenario status, workflow cloning, and exception paths.
 #include <algorithm>

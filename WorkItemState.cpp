@@ -1,3 +1,8 @@
+/**
+ * @file WorkItemState.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkItemState.h"
 #include "Task.h"
 

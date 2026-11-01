@@ -1,3 +1,8 @@
+/**
+ * @file WorkflowInstance.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkflowInstance.h"
 
 #include "InstanceSnapshot.h"

@@ -1,3 +1,8 @@
+/**
+ * @file SubProcess.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "SubProcess.h"
 
 #include "WorkNodeVisitor.h"    // Person 7

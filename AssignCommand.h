@@ -30,9 +30,23 @@ public:
     
     AssignCommand(WorkItem& item, Participant& assignee, Participant* actor);
 
+    /**
+     * @brief Performs the execute operation.
+     */
     void execute() override;
+    /**
+     * @brief Performs the undo operation.
+     */
     void undo() override;
+    /**
+     * @brief Performs the isUndoable operation.
+     * @return The result of the operation.
+     */
     bool isUndoable() const override;
+    /**
+     * @brief Performs the describe operation.
+     * @return The result of the operation.
+     */
     std::string describe() const override;
 private:
     Participant* assignee;

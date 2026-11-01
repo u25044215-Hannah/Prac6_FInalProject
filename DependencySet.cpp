@@ -1,3 +1,9 @@
+
+/**
+ * @file DependencySet.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DependencySet.h"
 #include "WorkNode.h"
 #include "WorkItem.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BackwardRecovery.cpp
+ * @brief Implements project functionality.
+ */
+
 
 #include "BackwardRecovery.h"
 #include "WorkflowInstance.h"

@@ -1,3 +1,8 @@
+/**
+ * @file CycleTimeVisitor.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "CycleTimeVisitor.h"
 #include "Stage.h"
 #include "SubProcess.h"

@@ -1,3 +1,8 @@
+/**
+ * @file FallbackPolicy.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "FallackPolicy.h" 
 #include "IntegrationTask.h"
 #include <stdexcept>

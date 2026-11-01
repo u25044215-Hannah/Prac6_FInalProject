@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionCommands.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef DEFINITION_COMMANDS_H
 #define DEFINITION_COMMANDS_H
 

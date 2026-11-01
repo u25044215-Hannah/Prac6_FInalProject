@@ -1,3 +1,8 @@
+/**
+ * @file ReadyItemIterator.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ReadyItemIterator.h"
 #include "WorkItem.h"
 #include "WorkNode.h"

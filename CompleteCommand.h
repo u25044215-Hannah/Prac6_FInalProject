@@ -31,7 +31,14 @@ public:
 
     CompleteCommand(WorkItem& item, const WorkflowData& result, Participant* actor);
 
+    /**
+     * @brief Performs the execute operation.
+     */
     void execute() override;
+    /**
+     * @brief Performs the describe operation.
+     * @return The result of the operation.
+     */
     std::string describe() const override;
 private:
     WorkflowData result;

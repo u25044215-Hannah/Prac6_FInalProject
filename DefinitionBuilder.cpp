@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionBuilder.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DefinitionBuilder.h"
 
 #include <map>
@@ -13,7 +18,6 @@
 #include "WorkContainer.h"
 #include "WorkNode.h"
 
-// ---- Other people's classes. Every call into them is marked INTEGRATION. ----
 #include "WorkflowDefinition.h"      // Person 1
 #include "Task.h"                    // Person 3
 #include "WorkItem.h"                // Person 3

@@ -1,3 +1,8 @@
+/**
+ * @file EscalationHandler.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "EscalationHandler.h"
 #include <stdexcept>
 

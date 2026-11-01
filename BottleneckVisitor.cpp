@@ -1,3 +1,8 @@
+/**
+ * @file BottleneckVisitor.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "BottleneckVisitor.h"
 #include "Stage.h"
 #include "SubProcess.h"

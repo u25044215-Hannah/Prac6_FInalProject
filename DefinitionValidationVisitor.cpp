@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionValidationVisitor.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DefinitionValidationVisitor.h"
 #include "Stage.h"
 #include "SubProcess.h"

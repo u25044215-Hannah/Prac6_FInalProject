@@ -1,3 +1,8 @@
+/**
+ * @file work_behaviour_test.cpp
+ * @brief Implements project functionality.
+ */
+
 // COS214 - Work behaviour smoke test
 // Compile as a separate test executable (this file contains main()).
 #include <iostream>

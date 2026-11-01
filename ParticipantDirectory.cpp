@@ -1,3 +1,8 @@
+/**
+ * @file ParticipantDirectory.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ParticipantDirectory.h"
 #include "Participant.h"
 #include "Role.h"
@@ -29,3 +34,4 @@ Participant* ParticipantDirectory::find(const std::string& id) const {
     auto it = participants_.find(id);
     return it == participants_.end() ? nullptr : it->second;
 }
+

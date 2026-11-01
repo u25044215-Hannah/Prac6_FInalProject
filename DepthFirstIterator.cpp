@@ -1,3 +1,8 @@
+/**
+ * @file DepthFirstIterator.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DepthFirstIterator.h"
 #include "WorkNode.h"
 #include "WorkContainer.h"

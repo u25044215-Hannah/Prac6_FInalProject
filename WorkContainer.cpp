@@ -1,3 +1,8 @@
+/**
+ * @file WorkContainer.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkContainer.h"
 
 #include <algorithm>

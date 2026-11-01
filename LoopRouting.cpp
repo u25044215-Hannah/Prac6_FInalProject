@@ -1,3 +1,8 @@
+/**
+ * @file LoopRouting.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "LoopRouting.h"
 #include "Condition.h"
 #include "WorkContainer.h"
@@ -36,3 +41,4 @@ bool LoopRouting::isComplete(const WorkContainer& container) const
     }
     return true;
 }
+

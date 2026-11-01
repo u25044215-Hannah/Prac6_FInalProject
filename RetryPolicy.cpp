@@ -1,3 +1,8 @@
+/**
+ * @file RetryPolicy.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "RetryPolicy.h"
 #include <stdexcept>
 

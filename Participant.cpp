@@ -1,3 +1,8 @@
+/**
+ * @file Participant.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "Participant.h"
 #include "Role.h"
 #include <algorithm>

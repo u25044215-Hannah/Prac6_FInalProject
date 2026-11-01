@@ -1,3 +1,8 @@
+/**
+ * @file ApprovalLevel.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ApprovalLevel.h"
 #include "ApprovalRequest.h"
 #include <stdexcept>

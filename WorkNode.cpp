@@ -1,3 +1,8 @@
+/**
+ * @file WorkNode.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkNode.h"
 
 WorkNode::WorkNode(const std::string& id, const std::string& name) 

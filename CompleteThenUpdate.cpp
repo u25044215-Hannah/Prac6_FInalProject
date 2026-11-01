@@ -1,3 +1,8 @@
+/**
+ * @file CompleteThenUpdate.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "CompleteThenUpdate.h"
 #include "WorkflowInstance.h"
 #include "WorkflowDefinition.h"

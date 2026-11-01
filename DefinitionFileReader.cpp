@@ -1,3 +1,8 @@
+/**
+ * @file DefinitionFileReader.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "DefinitionFileReader.h"
 
 #include <fstream>

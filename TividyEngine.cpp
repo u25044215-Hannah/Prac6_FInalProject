@@ -1,3 +1,8 @@
+/**
+ * @file TividyEngine.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "TividyEngine.h"
 #include "InMemoryDefinitionRepository.h"
 #include "TividyException.h"

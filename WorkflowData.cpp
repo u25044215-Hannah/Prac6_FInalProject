@@ -1,3 +1,8 @@
+/**
+ * @file WorkflowData.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkflowData.h"
 #include "TividyException.h"
 

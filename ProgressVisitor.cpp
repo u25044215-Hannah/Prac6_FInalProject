@@ -1,3 +1,8 @@
+/**
+ * @file ProgressVisitor.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ProgressVisitor.h"
 #include "Stage.h"
 #include "SubProcess.h"

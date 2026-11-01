@@ -1,3 +1,8 @@
+/**
+ * @file SkillAssignment.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "SkillAssignment.h"
 #include "Task.h"
 #include "Participant.h"

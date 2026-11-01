@@ -13,6 +13,9 @@
 ///abstract store of published workflow definitions
 class DefinitionRepository {
 public:
+    /**
+     * @brief Performs the DefinitionRepository operation.
+     */
     virtual ~DefinitionRepository() {}
 
     /// @return the definition after saving, which is published and has a version.

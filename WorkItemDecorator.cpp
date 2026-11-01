@@ -1,3 +1,8 @@
+/**
+ * @file WorkItemDecorator.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "WorkItemDecorator.h"
 #include <iostream>
 

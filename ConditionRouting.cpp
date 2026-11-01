@@ -1,3 +1,8 @@
+/**
+ * @file ConditionRouting.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ConditionalRouting.h"
 #include "Condition.h"
 #include "WorkContainer.h"

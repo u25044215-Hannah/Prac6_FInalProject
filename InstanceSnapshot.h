@@ -32,8 +32,16 @@ class InstanceSnapshot {
     friend class WorkflowInstance;
 
 public:
+    /**
+     * @brief Performs the InstanceSnapshot operation.
+     */
     ~InstanceSnapshot();
 
+    /**
+     * @brief Performs the taken operation.
+     * @param caretaker Parameter used by this operation.
+     * @return The result of the operation.
+     */
     /** @brief When the snapshot was taken (narrow interface for the caretaker). */
     std::time_t takenAt() const;
 

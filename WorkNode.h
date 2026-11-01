@@ -1,3 +1,8 @@
+/**
+ * @file WorkNode.h
+ * @brief Declares the project interfaces and types.
+ */
+
 #ifndef WORKNODE_H
 #define WORKNODE_H
 
@@ -8,8 +13,14 @@ class WorkContainer;
 class WorkNodeVisitor;
 class WorkNodeIterator;
 
+/**
+ * @brief Represents the WorkNode component of the workflow engine.
+ */
 class WorkNode {
 public:
+    /**
+     * @brief Performs the WorkNode operation.
+     */
     virtual ~WorkNode();
 
     /// Begin execution of this node.
@@ -28,6 +39,10 @@ public:
 
     /// Iterator factories. The caller owns (and deletes) the returned iterator.
     virtual WorkNodeIterator* createIterator() = 0;
+    /**
+     * @brief Performs the createReadyIterator operation.
+     * @return The result of the operation.
+     */
     virtual WorkNodeIterator* createReadyIterator() = 0;
 
     /**
@@ -40,10 +55,26 @@ public:
     /// Memento support: record / re-apply the state name of every work item in
     /// this subtree, keyed by node id. Nodes with no state of their own do nothing.
     virtual void captureState(std::map<std::string, std::string>& out) const { (void)out; }
+    /**
+     * @brief Performs the restoreState operation.
+     * @param in Parameter used by this operation.
+     */
     virtual void restoreState(const std::map<std::string, std::string>& in) { (void)in; }
 
+    /**
+     * @brief Performs the getId operation.
+     * @return The result of the operation.
+     */
     const std::string& getId() const;
+    /**
+     * @brief Performs the getName operation.
+     * @return The result of the operation.
+     */
     const std::string& getName() const;
+    /**
+     * @brief Performs the getParent operation.
+     * @return The result of the operation.
+     */
     WorkContainer* getParent() const;
 
     /// Called by WorkContainer::add / remove only.

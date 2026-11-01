@@ -1,3 +1,8 @@
+/**
+ * @file SequentialRouting.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "SequentialRouting.h"
 #include "WorkContainer.h"
 #include "WorkNode.h"

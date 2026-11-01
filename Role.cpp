@@ -1,3 +1,8 @@
+/**
+ * @file Role.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "Role.h"
 
 Role::Role(const std::string& name) : name_(name) {}

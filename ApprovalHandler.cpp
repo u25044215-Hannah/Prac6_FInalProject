@@ -1,3 +1,8 @@
+/**
+ * @file ApprovalHandler.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "ApprovalHandler.h"
 #include "ApprovalRequest.h"
 #include <stdexcept>

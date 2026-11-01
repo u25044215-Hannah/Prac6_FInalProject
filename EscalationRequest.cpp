@@ -1,3 +1,8 @@
+/**
+ * @file EscalationRequest.cpp
+ * @brief Implements project functionality.
+ */
+
 #include "EscalationRequest.h"
 #include <stdexcept>
 
@@ -8,3 +13,4 @@ void EscalationRequest::setLevelReached(int level) {
     if (level < 0) throw std::invalid_argument("Escalation level must be non-negative");
     levelReached_ = level;
 }
+
