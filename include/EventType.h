@@ -1,0 +1,14 @@
+
+#ifndef EVENTTYPE_H
+#define EVENTTYPE_H
+
+enum class EventType {
+    WORK_ITEM_STATE_CHANGED,
+    DEADLINE_EXPIRED,
+    THRESHOLD_BREACHED,
+    EXTERNAL_EVENT,
+    INTEGRATION_FAILED,
+    ACCESS_DENIED
+};
+
+#endif
